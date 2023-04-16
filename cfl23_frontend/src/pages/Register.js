@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import "../css/login.css";
-import { NavLink, Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 function Register() {
@@ -23,20 +23,13 @@ function Register() {
                 lastName,
                 email,
                 password,
-                confirmPassword,
             });
             console.log("Response = " + response.data);
             setFirstName('');
             setLastName('');
             setPassword('');
-            setConfirmPassword('');
             setEmail('');
         } catch (error) {
-            console.log(firstName);
-            console.log(lastName);
-            console.log(password);
-            console.log(email);
-            console.log(confirmPassword);
             console.error(error);
         }
         if (password !== confirmPassword) {

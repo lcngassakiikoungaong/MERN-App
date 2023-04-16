@@ -5,6 +5,7 @@ import "../css/shared_css/inputform.css";
 import "../css/shared_css/table.css";
 import "../css/shared_css/herobutton.css";
 import "../css/give.css";
+import axios from 'axios';
 
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
@@ -27,27 +28,43 @@ function Give() {
           return amnt;
         }
     
-        let onAddWebsite = (e) => {
+        let onAddWebsite = async (e) => {
             e.preventDefault();
-            let cate = e.target.elements.Category.value;
-            let prdr = e.target.elements.Purchase.value;
+            
+            let category = e.target.elements.Category.value;
+            let description = e.target.elements.Purchase.value;
             let date = e.target.elements.Date.value;
-            let amnt = validateValue(e.target.elements.Amount.value);
+            let amount = parseFloat(validateValue(e.target.elements.Amount.value));
+            let rowIndex = parseFloat(rows.length+1);
             
-            if(amnt == 0)
+            if(amount != 0)
             {
-             
-            }else{
+                let formatAmnt = '$' + amount.toLocaleString('en-US', {'minimumFractionDigits':2,'maximumFractionDigits':2});
+            
+                setTotal(parseFloat(total) + amount);
+                sessionStorage.setItem("giveTotal", parseFloat(total) + amount);
+            
+                setRows([...rows, { cate: category, prdr: description, date, formatAmnt }]);
+                sessionStorage.setItem("giveTableRows", JSON.stringify([...rows, { cate: category, prdr: description, date, formatAmnt }]));
+                try {
+                    //send post request to the 'api/users' endpoint
+                    console.log(category);
+                    console.log(description);
+                    console.log(date);
+                    console.log(amount);
+                    console.log(rowIndex);
 
-            
-            
-            let formatAmnt = '$' + parseFloat(amnt).toLocaleString('en-US', {'minimumFractionDigits':2,'maximumFractionDigits':2});
-            
-            setTotal(parseFloat(total) + parseFloat(amnt));
-            sessionStorage.setItem("giveTotal", parseFloat(total) + parseFloat(amnt));
-        
-            setRows([...rows, { cate, prdr, date, formatAmnt }]);
-            sessionStorage.setItem("giveTableRows", JSON.stringify([...rows, { cate, prdr, date, formatAmnt }]));
+                    const response = await axios.post('http://localhost:5000/api/giveRow', { 
+                        category,
+                        description,
+                        date,
+                        amount,
+                        rowIndex,
+                    });
+                    console.log("Response = " + response.data);
+                } catch (error) {
+                    console.error(error);
+                }
             }
         };
     
