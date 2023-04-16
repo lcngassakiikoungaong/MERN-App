@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import "../css/shared_css/inputform.css";
@@ -9,22 +9,43 @@ import "../css/live.css";
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
 function Live() {  
-        // set current expense total and retrieve table rows from session storage
-        let [total, setTotal] = useState(parseFloat(sessionStorage.getItem("liveTotal") || 0));
-        let [rows, setRows] = useState(JSON.parse(sessionStorage.getItem("liveTableRows")) || []);
-    
-         const [isMobile] = useState(window.innerWidth <= 480);
-    
+    // set current expense total and retrieve table rows from session storage
+    let [total, setTotal] = useState(parseFloat(sessionStorage.getItem("liveTotal") || 0));
+    let [rows, setRows] = useState(JSON.parse(sessionStorage.getItem("liveTableRows")) || []);
+    const [isMobile] = useState(window.innerWidth <= 480);
     const descriptionHeader = isMobile ? "Desc." : "Description";
     const amntHeader = isMobile ? "Amnt." : "Amount";
+    let amntRef = useRef(null);
+
+        
+        let validateValue = (amnt) => {
+          let regX = /\D+/g;
+
+          if (amnt.trim().search(regX) !== -1){
+            amnt = amnt.replace(regX, "");
+            amntRef.current.value = amnt;
+            if (amnt.search(/\d+/g) === -1)
+            {
+              amnt = 0;
+            }
+
+          }
+          return amnt;
+        }
 
 
         let onAddWebsite = (e) => {
             e.preventDefault();
+
             let cate = e.target.elements.Category.value;
             let prdr = e.target.elements.Purchase.value;
             let date = e.target.elements.Date.value;
-            let amnt = e.target.elements.Amount.value;
+            let amnt = validateValue(e.target.elements.Amount.value);
+            
+            if(amnt == 0)
+            {
+              
+            }else{
         
             let formatAmnt = '$' + parseFloat(amnt).toLocaleString('en-US', {'minimumFractionDigits':2,'maximumFractionDigits':2});
             
@@ -33,6 +54,7 @@ function Live() {
         
             setRows([...rows, { cate, prdr, date, formatAmnt }]);
             sessionStorage.setItem("liveTableRows", JSON.stringify([...rows, { cate, prdr, date, formatAmnt }]));
+            }
         };
     
         let onDeleteRow = (index) => {
@@ -163,6 +185,8 @@ return (
                             data-type="currency"
                             placeholder="Enter the amount"
                             onKeyPress={handleIncomeKeyPress}
+                            autoComplete="false"
+                            ref={amntRef}
                             name="Amount"
                             required />
                         </div>

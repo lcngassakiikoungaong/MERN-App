@@ -98,9 +98,24 @@ function Summary() {
           }
           
       };
+
+      let validateValue = (amnt) => {
+        let regX = /\D+/g;
+
+        if (amnt.trim().search(regX) !== -1){
+          amnt = amnt.replace(regX, "");
+          if (amnt.search(/\d+/g) === -1)
+          {
+            amnt = 0;
+          }
+        }
+        return amnt;
+      }
     
       let handleIncomeFocusOut = () => {
         
+        incomeValue = validateValue(incomeValue);
+        setIncomeValue(incomeValue);
 
         if(incomeValue !== '')
         {
@@ -385,6 +400,7 @@ function Summary() {
                             onFocus={handleIncomeInputFocus} 
                             onKeyPress={handleIncomeKeyPress} 
                             onBlur={handleIncomeFocusOut} 
+                            autoComplete="false"
                             placeholder="Enter monthly income" 
                             /> 
 
