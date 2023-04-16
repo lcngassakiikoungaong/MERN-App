@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import Chart from "chart.js/auto";
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
@@ -30,6 +30,9 @@ function Summary() {
     let after_tax_divRef = useRef(null);
     let [afterTaxNum, setAfterTaxNum] = useState(parseFloat(sessionStorage.getItem("after_tax_num") || 0));
     let [incomeValue, setIncomeValue] = useState(parseFloat(sessionStorage.getItem("income_value")) || '');
+
+    // Pie Chart viewport Ref
+    const pieViewportRef = useRef(null);
 
     /** Links to other pages ***/
     useEffect(() => {
@@ -219,12 +222,12 @@ function Summary() {
             }
 
             
-            let [chart, setChart] = useState(null);
-            let [expenseTotal, setExpenseTotal] = useState(live_sum + give_sum + grow_sum + owe_sum);
-            let chartSectionRef = useRef(null);
-            let canvasRef = useRef(null);
-            let chartErrorRef = useRef(null);
-            let chartDisplayed = false;
+        let [chart, setChart] = useState(null);
+        let [expenseTotal, setExpenseTotal] = useState(live_sum + give_sum + grow_sum + owe_sum);
+        let chartSectionRef = useRef(null);
+        let canvasRef = useRef(null);
+        let chartErrorRef = useRef(null);
+        let [chartDisplayed, setChartDisplayed] = useState(false);
     
             let displayChart = () => {
 
@@ -267,10 +270,10 @@ function Summary() {
                 let nonZeroData = nonZeroIndexes.map(idx => yValues[idx]);
                 let nonZeroColors = nonZeroIndexes.map(idx => barColors[idx]);
                 let nonZeroHoverColors = nonZeroIndexes.map(idx => hoverColors[idx]);
-            
+                
                 if (chart) {
                     chart.destroy();
-                  }
+                }
 
                 chart = new Chart(canvas, {
                     type: "pie",
@@ -327,41 +330,73 @@ function Summary() {
                     }
                     }
                 }); 
+
+                setChart(chart);
             }
         }
 
-        function animateChart()
-        {
-          if(window.location.pathname !== "/summary"){
+        let animateChart = () => {
             
-            window.removeEventListener("scroll", animateChart); // if user moves off page, delete listener
-          
-          }else{
-            
-            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-          
             let canvas = (canvasRef || '').current;
             let chartError = (chartErrorRef || '').current;
-        
-            if (chartDisplayed && scrollTop < 200) {
-              chartDisplayed = false;
-              canvas.style.opacity = 0;
-              canvas.style.transition = "opacity 0.5s ease-in-out";
+            
+            if (chartDisplayed === true) {
+                chartDisplayed = false;
+                setChartDisplayed(chartDisplayed);
+                canvas.style.opacity = 0;
+                canvas.style.transition = "opacity 0.5s ease-in-out";
             }
         
-            if (!chartDisplayed && scrollTop >= 200) {
-              chartDisplayed = true;
-              canvas.style.opacity = 1;
-              canvas.style.transition = "opacity 0.5s ease-in-out";
-              displayChart();
+            if (chartDisplayed === false) {
+                chartDisplayed = true;
+                setChartDisplayed(chartDisplayed);
+                canvas.style.opacity = 1;
+                canvas.style.transition = "opacity 0.5s ease-in-out";
+                displayChart();
             }
-          }
           
         }
+
+        function useIsInViewPort(ref)
+        {
+            const [isIntersecting, setIsIntersecting] = useState(false);
+
+            const observer = useMemo(
+                () =>
+                    new IntersectionObserver(([entry]) => 
+                    setIsIntersecting(entry.isIntersecting),
+                    ),
+                [],
+            );
+
+            useEffect(() => {
+                observer.observe(ref.current);
+
+                return () => {
+                    observer.disconnect();
+                };
+
+            }, [ref, observer]);
+
             
+            return isIntersecting;
+        }
+        const isInViewPort = useIsInViewPort(chartSectionRef);
+
         useEffect(() => {
-          window.addEventListener("scroll", animateChart);
-          }, []);
+            if(isInViewPort === true)
+            {
+                animateChart();
+                
+            }else if (isInViewPort === false && chartDisplayed === true)
+            {
+                animateChart();
+            }
+
+        }, [isInViewPort])
+        
+
+
 
                 
     return (
@@ -446,7 +481,9 @@ function Summary() {
                 </section>
             
                 <h1 className="pie-header">Breakdown of Expenses</h1>
+
                 <h3 className="pie-header">(For best results, make sure to log expenses in all categories.)</h3>
+                
                 <section className="alt-chart" id="chartSection" ref={chartSectionRef}>
                     <canvas style={{ width: '35%', maxWidth: '500px',height: '35%',maxHeight:'500px' }} ref={canvasRef} />
                     <div id="chartError" style= { {display: 'none'} } ref={chartErrorRef}>No data to display. Please add your expenses to the appropriate pages.</div>
