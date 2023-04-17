@@ -1,38 +1,80 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import "../css/shared_css/inputform.css";
 import "../css/shared_css/table.css";
 import "../css/shared_css/herobutton.css";
 import "../css/live.css";
+import axios from 'axios';
 
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
 function Live() {  
-        // set current expense total and retrieve table rows from session storage
-        let [total, setTotal] = useState(parseFloat(sessionStorage.getItem("liveTotal") || 0));
-        let [rows, setRows] = useState(JSON.parse(sessionStorage.getItem("liveTableRows")) || []);
-    
-         const [isMobile] = useState(window.innerWidth <= 480);
-    
+    // set current expense total and retrieve table rows from session storage
+    let [total, setTotal] = useState(parseFloat(sessionStorage.getItem("liveTotal") || 0));
+    let [rows, setRows] = useState(JSON.parse(sessionStorage.getItem("liveTableRows")) || []);
+    const [isMobile] = useState(window.innerWidth <= 480);
     const descriptionHeader = isMobile ? "Desc." : "Description";
     const amntHeader = isMobile ? "Amnt." : "Amount";
+    let amntRef = useRef(null);
+
+        
+        let validateValue = (amnt) => {
+          let regX = /\D+/g;
+
+          if (amnt.trim().search(regX) !== -1){
+            amnt = amnt.replace(regX, "");
+            amntRef.current.value = amnt;
+            if (amnt.search(/\d+/g) === -1)
+            {
+              amnt = 0;
+            }
+
+          }
+          return amnt;
+        }
 
 
-        let onAddWebsite = (e) => {
+        let onAddWebsite = async (e) => {
             e.preventDefault();
-            let cate = e.target.elements.Category.value;
-            let prdr = e.target.elements.Purchase.value;
+
+            let category = e.target.elements.Category.value;
+            let description = e.target.elements.Purchase.value;
             let date = e.target.elements.Date.value;
-            let amnt = e.target.elements.Amount.value;
-        
-            let formatAmnt = '$' + parseFloat(amnt).toLocaleString('en-US', {'minimumFractionDigits':2,'maximumFractionDigits':2});
+            let amount = parseFloat(validateValue(e.target.elements.Amount.value));
+            let rowIndex = parseFloat(rows.length+1);
             
-            setTotal(parseFloat(total) + parseFloat(amnt));
-            sessionStorage.setItem("liveTotal", parseFloat(total) + parseFloat(amnt));
+            if(amount != 0)
+            {
+                let formatAmnt = '$' + amount.toLocaleString('en-US', {'minimumFractionDigits':2,'maximumFractionDigits':2});
+            
+                setTotal(parseFloat(total) + amount);
+                sessionStorage.setItem("liveTotal", parseFloat(total) + amount);
+            
+                setRows([...rows, { cate: category, prdr: description, date, formatAmnt }]);
+                sessionStorage.setItem("liveTableRows", JSON.stringify([...rows, { cate: category, prdr: description, date, formatAmnt }]));
+                try {
+                    //send post request to the 'api/users' endpoint
+                    console.log(category);
+                    console.log(description);
+                    console.log(date);
+                    console.log(amount);
+                    console.log(rowIndex);
+
+                    const response = await axios.post('http://localhost:5000/api/liveRow', { 
+                        category,
+                        description,
+                        date,
+                        amount,
+                        rowIndex,
+                    });
+                    console.log("Response = " + response.data);
+                } catch (error) {
+                    console.error(error);
+                }
+            }
         
-            setRows([...rows, { cate, prdr, date, formatAmnt }]);
-            sessionStorage.setItem("liveTableRows", JSON.stringify([...rows, { cate, prdr, date, formatAmnt }]));
+        
         };
     
         let onDeleteRow = (index) => {
@@ -163,6 +205,8 @@ return (
                             data-type="currency"
                             placeholder="Enter the amount"
                             onKeyPress={handleIncomeKeyPress}
+                            autoComplete="false"
+                            ref={amntRef}
                             name="Amount"
                             required />
                         </div>

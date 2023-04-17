@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import "../css/login.css";
-import { NavLink, Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 function Register() {
@@ -14,26 +14,6 @@ function Register() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setErrorMessage] = useState('');
 
-    const handleFirstNameChange = (e) => {
-        setFirstName(e.target.value);
-    };
-
-    const handleLastNameChange = (e) => {
-        setLastName(e.target.value);
-    };
-
-    const handleEmailChange = (e) => {
-        setEmail(e.target.value);
-    };
-
-    const handlePasswordChange = (e) => {
-        setPassword(e.target.value);
-    };
-
-    const handleConfirmPasswordChange = (e) => {
-        setConfirmPassword(e.target.value);
-    };
-
     const handleSubmit = async (e) => { //onSubmit --> post
         e.preventDefault();
         try{
@@ -43,13 +23,11 @@ function Register() {
                 lastName,
                 email,
                 password,
-                confirmPassword,
             });
             console.log("Response = " + response.data);
             setFirstName('');
             setLastName('');
             setPassword('');
-            setConfirmPassword('');
             setEmail('');
         } catch (error) {
             console.error(error);
@@ -87,7 +65,7 @@ function Register() {
                                     placeholder="First Name"
                                     className="input"
                                     value={firstName}
-                                    onChange={handleFirstNameChange}
+                                    onChange={(e) => setFirstName(e.target.value)}
                                     required
                                 />
                             </div>
@@ -97,7 +75,7 @@ function Register() {
                                     placeholder="Last Name"
                                     className="input"
                                     value={lastName}
-                                    onChange={handleLastNameChange}
+                                    onChange={(e) => setLastName(e.target.value)}
                                     required
                                 />
                             </div>
@@ -107,7 +85,7 @@ function Register() {
                                     placeholder="Email"
                                     className="input"
                                     value={email}
-                                    onChange={handleEmailChange}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     required
                                 />
                             </div>
@@ -117,7 +95,7 @@ function Register() {
                                     placeholder="Password"
                                     className="password"
                                     value={password}
-                                    onChange={handlePasswordChange}
+                                    onChange={(e) => setPassword(e.target.value)}
                                     required
                                 />
                             </div>
@@ -127,7 +105,7 @@ function Register() {
                                     placeholder="Confirm Password"
                                     className="password"
                                     value={confirmPassword}
-                                    onChange={handleConfirmPasswordChange}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
                                     required
                                 />
                                 <i className="bx bx-hide eye-icon"></i>
