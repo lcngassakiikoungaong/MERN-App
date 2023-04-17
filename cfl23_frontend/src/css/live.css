@@ -27,56 +27,27 @@ nav .fa-solid {
   height: auto;
 }
 
-@media only screen and (max-width: 390px) {
-  .tbl {
-    width: 100%;
-  }
-}
-
 table {
- 
+
   min-width: 370px;
   table-layout: fixed;
 }
+
 tr {
-  max-height: 100px; /* set maximum height to 100 pixels */
-  overflow: hidden; /* hide any content that exceeds the maximum height */
+  max-height: 100px;
+  overflow: hidden;
 }
-/*td:nth-child(2) {
-  max-height: 200px; /* set maximum height to 200 pixels */
-  /*overflow: auto; /* enable vertical scrolling */
-  /*white-space: pre-wrap; /* wrap long lines of text */
-/*}*/
+
 table td {
   max-height: 50px;
 }
-@media only screen and (max-width: 600px) {
-  .table th {
-    font-size: 14px;
+
+@media screen and (max-width: 700px) {
+  #form-header{
+    font-size: 30px;
+    padding-top: 20px;
   }
 }
-@media only screen and (max-width: 480px) {
-  #tbl td {
-    font-size: 10px;
-  }
-}
-@media (max-width: 600px) {
-  #tbl thead th {
-    text-align: center;
-  }
-}
-@media (max-width: 768px) {
-  table td {
-    max-height: 40px;
-    text-align: center;
-  }
-}
-/*@media only screen and (max-width: 480px) {
-   styles for screens with a maximum width of 480px (mobile devices) 
-  #tbl th:nth-child(2):before {
-    content: "Desc.";
-  }
-}*/
 
 
 th:first-child,
@@ -175,4 +146,39 @@ h1 {
   border: 3px solid #999999;
   z-index: 9;
   margin: auto;
+}
+
+@media only screen and (max-width: 390px) {
+  .tbl {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .table th {
+    font-size: 14px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  #tbl td {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  #tbl thead th {
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  table td {
+    max-height: 40px;
+    text-align: center;
+  }
+
+  td button {
+    align-items: center;
+  }
 }

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "../css/shared_css/navbar.css";
-import { Link } from 'react-router-dom';
-
+import { Link} from 'react-router-dom';
+import logopic from '../images/cfl-logo-new.png';
 
 class Navbar extends Component {
     state = {clicked: false};
@@ -10,7 +10,11 @@ class Navbar extends Component {
         this.setState({clicked: !this.state.clicked})
     }
 
-    render() {
+    logout = () => {
+        window.location.href = "/";
+    }
+
+    render() { 
     return (
         <>
             <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -32,6 +36,7 @@ class Navbar extends Component {
                     <li><Link to="/grow" id="growNav">GROW</Link></li>
                     <li><Link to="/owe" id="oweNav">OWE</Link></li>
                     <li><Link to="/about" id="homeNav">ABOUT</Link></li>
+                    <button id="SO-Btn" onClick={this.logout}>Sign out</button>
                 </ul>
             </div>
             <div id="menu" onClick={this.handleCLick}>

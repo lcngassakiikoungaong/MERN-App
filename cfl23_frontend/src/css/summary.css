@@ -65,8 +65,8 @@ p {
 
 .circular-progress {
   position: relative;
-  height: 250px;
-  width: 250px;
+  height: 270px;
+  width: 270px;
   border-radius: 50%;
   background: conic-gradient(darkgoldenrod 0deg, #ededed 0deg);
   display: flex;
@@ -78,8 +78,8 @@ p {
 .circular-progress::before {
   content: "";
   position: absolute;
-  height: 210px;
-  width: 210px;
+  height: 220px;
+  width: 220px;
   background-color: white;
   border-radius: 50%;
 }
@@ -456,7 +456,7 @@ h3 {
 }
 
 /*Alternate pie chart*/
-.pie-header {
+.pie-header1 {
   text-align: center;
 }
 
@@ -465,56 +465,114 @@ h3 {
   justify-content: center;
 }
 
-/* Allows columns to fit within an iphone view */
-@media screen and (max-width: 700px) {
 
-  div,
-  .chartError {
-    margin: auto;
-  }
-}
-
-
-/******************* Summary Header Section ***********************/
-
-/*
-.income {
-    width: 35%;
-    margin: auto;
-}
-
-
-
-.income #income_sum {
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.2);
-    margin-bottom: 0;
-    background-color: #fff;
-    text-align: center;
-}
-
-.income #income_sum > label{
-    padding-left: 2%;
-    font-size: 30px;
-}
-
-.income #income_input > #income_input{
-    font-size: 35px;
-}
-
-.income #income_sum > h2 {
-  float: right;
-  font-size: 35px;
-  display: inline;
-  padding-right: 2%;
-  color: green;
-}
-*/
 .pie-header {
   margin: auto;
 }
 
-#chartError{
+#chartError {
   margin: auto;
 }
+/* Allows columns to fit within an iphone view */
+@media screen and (max-width: 700px) {
+
+div, .chartError {
+    margin: auto;
+  }
+
+
+
+#summary_head h1 {
+  font-size: 25px;
+  padding-top: 20px;
+}
+
+.progress-container {
+  height: 600px;
+  width: 320px;
+}
+
+.income-text {
+  font-size: 20px;
+}
+
+#income_inputRef {
+  margin: auto;
+  height: 45px;
+}
+
+#after_tax_h1 {
+  text-align: center;
+  margin: auto;
+  padding-right: 70px;
+}
+
+#total_expenses_h1 {
+  text-align: center;
+  margin: auto;
+  padding-right: 70px;
+}
+
+#total_expenses{
+  text-align: left;
+}
+
+.circular-progress {
+  position: relative;
+  height: 270px;
+  width: 270px;
+  border-radius: 50%;
+  background: conic-gradient(darkgoldenrod 0deg, #ededed 0deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.circular-progress::before {
+  content: "";
+  position: absolute;
+  height: 230px;
+  width: 230px;
+  background-color: white;
+  border-radius: 50%;
+}
+
+#live_bar h1 {
+  font-size: 30px;
+}
+
+#live_bar h2 {
+  font-size: 30px;
+}
+
+#give_bar h1 {
+  font-size: 30px;
+}
+
+#give_bar h2 {
+  font-size: 30px;
+}
+
+#grow_bar h1 {
+  font-size: 30px;
+}
+
+#grow_bar h2 {
+  font-size: 30px;
+}
+
+#owe_bar h1 {
+  font-size: 30px;
+}
+
+#owe_bar h2 {
+  font-size: 30px 
+}
+
+.pie-header1 {
+  font-size: 25px;
+}
+
+}
+
