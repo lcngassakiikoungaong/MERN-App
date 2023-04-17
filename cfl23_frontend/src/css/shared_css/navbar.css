@@ -10,9 +10,10 @@
 
 nav {
   display: flex;
-  padding: 2% 6%;
+  padding: 0.2% 6%;
   justify-content: space-between;
   align-items: center;
+  background-color: #1c2841;
 }
 
 .header nav img {
@@ -89,6 +90,15 @@ nav {
 #menu {
   display: none;
 }
+
+#SO-Btn {
+  border-radius: 5px;
+  background: gray;
+  color: white;
+  height: 25px;
+  width: 65px;
+  border: 2px solid gray;
+}
 /* This is for the phone view */
 
 @media screen and (max-width: 700px) {
@@ -96,7 +106,8 @@ nav {
     font-size: 20px;
   }
   nav {
-    background: #17294c;
+    background: #1c2841;
+    padding: 2% 6%;
   }
 
   .nav-links ul li {
@@ -111,7 +122,7 @@ nav {
     right: -200px;
     width: 200px;
     height: 100vh;
-    background: #17294c;
+    background: #1c2841;
     padding: 40px 0 0 10px;
     transition: 1s;
   }
@@ -134,6 +145,10 @@ nav {
   }
   #menu {
     color: #fff;
+  }
+
+  #SO-Btn {
+    display: block;
   }
 
 }

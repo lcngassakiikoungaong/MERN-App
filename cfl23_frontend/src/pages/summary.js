@@ -429,11 +429,11 @@ function Summary() {
                     </section>
                 </section>
             
-                <h1 className="pie-header">Breakdown of Expenses</h1>
+                <h1 className="pie-header1">Breakdown of Expenses</h1>
                 <h3 className="pie-header">(For best results, make sure to log expenses in all categories.)</h3>
                 <section className="alt-chart" id="chartSection" ref={chartSectionRef}>
                     <canvas style={{ width: '35%', maxWidth: '500px',height: '35%',maxHeight:'500px' }} ref={canvasRef} />
-                    <div id="chartError" style= { {display: 'none'} } ref={chartErrorRef}>No data to display. Please add your expenses to the appropriate pages.</div>
+                    <div id="chartError" style= { {display: 'none'} } ref={chartErrorRef}>No data to display.</div>
                 </section>
                 
                 <Footer></Footer>
