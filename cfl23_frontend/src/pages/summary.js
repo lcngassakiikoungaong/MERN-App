@@ -3,6 +3,7 @@ import Chart from "chart.js/auto";
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
 import "../css/summary.css";
+//import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 function Summary() {
     //Finance bar DOM container
@@ -228,7 +229,7 @@ function Summary() {
         let canvasRef = useRef(null);
         let chartErrorRef = useRef(null);
         let [chartDisplayed, setChartDisplayed] = useState(false);
-    
+
             let displayChart = () => {
 
                 let yValues = [live_sum, give_sum, grow_sum, owe_sum];
@@ -284,7 +285,8 @@ function Summary() {
                         hoverBackgroundColor: nonZeroHoverColors,
                         data: nonZeroData,
                         datalabels: {
-                        color: 'white'
+                        color: 'white',
+                        labels: null
                         },
                         animation: {
                         duration: 2000
@@ -293,12 +295,12 @@ function Summary() {
                     },
                     options: {
                     plugins: {
-                        datalabels: {
+                         datalabels: {  
                         display: true,
-                        formatter: function(data) {
-                            let newData = data / expenseTotal * 100;
-                            return newData.toFixed(1) + '%';
-                        },
+                        formatter: function(value, context) {
+                            let percentage = ((value / expenseTotal) * 100).toFixed(1) + '%';
+                            return percentage;
+                          },
                         function (value, index, values) {
                             if (value > 0) {
                             value = value.toString();
@@ -309,18 +311,10 @@ function Summary() {
                             value = "";
                             return value;
                             }
-                        },
-                                function (value, index, values) {
-                                    if (value > 0) {
-                                    value = value.toString();
-                                    value = value.split(/(?=(?:...)*$)/);
-                                    value = value.join(",");
-                                    return value;
-                                    } else {
-                                    value = "";
-                                    return value;
-                                    }
-                                }}
+                        }},
+                        display: function(context) {
+                            return context.dataset.data[context.dataIndex] > 0; // only display labels for non-zero values
+                          }
                         },
                     animation: {
                         
@@ -328,7 +322,7 @@ function Summary() {
                         animateScale: true,
                         //duration: 2000
                     }
-                    }
+                }
                 }); 
 
                 setChart(chart);
@@ -411,7 +405,6 @@ function Summary() {
                 rel="stylesheet"
                 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
             />
-
             <section className='headersm'>
                 <Navbar></Navbar>
 
