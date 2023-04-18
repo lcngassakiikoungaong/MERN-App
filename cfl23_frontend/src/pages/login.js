@@ -11,6 +11,7 @@ function Login() {
     const [loading, setloading] = useState(undefined);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [errorMes, setErrorMes] = useState('');
 
     useEffect(() => { //loading screen timer
         setTimeout(() => {
@@ -37,13 +38,21 @@ function Login() {
                 console.log("axios error: ", error);
             });
             sessionStorage.setItem('userID', response.data[0]._id);
-            alert("user email: " + response.data[0].email + "\n" + "user ID: " + response.data[0]._id);
-
+            //checks if password is correct
+            if (response.data[0].password === password)
+            {
+                //alert to show userID and email if login is correct
+                alert("user email: " + response.data[0].email + "\n" + "user ID: " + response.data[0]._id);
+                //navigates to summary after login has been authenticated
+                navigate('/summary');
+            } else {
+                //error message if password is not correct
+                setErrorMes("The password you have entered is incorrect");
+            }
+            
         } catch (error) {
             console.error("try catch error: ", error);
         }
-
-        navigate('/summary');
     };
 
 
@@ -71,6 +80,7 @@ function Login() {
                             <div className="form-content">
                                 <header>Login</header>
                                 <form action="#" onSubmit={handleSubmit}>
+                                    {errorMes && <p style={{color: "red"}}>{errorMes}</p>}
                                     <div className="field input-field">
                                         <input type="email" placeholder="Email" className="input" value={email} onChange={(e) => setEmail(e.target.value)} />
                                     </div>
