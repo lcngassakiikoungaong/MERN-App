@@ -3,6 +3,7 @@ import Chart from "chart.js/auto";
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
 import "../css/summary.css";
+import axios from "axios";
 
 function Summary() {
     //Finance bar DOM container
@@ -104,6 +105,7 @@ function Summary() {
 
       let validateValue = (amnt) => {
         let regX = /\D+/g;
+        amnt = String(amnt);
 
         if (amnt.trim().search(regX) !== -1){
           amnt = amnt.replace(regX, "");
@@ -115,18 +117,42 @@ function Summary() {
         return amnt;
       }
     
-      let handleIncomeFocusOut = () => {
+      let handleIncomeFocusOut = async () => { 
         
         incomeValue = validateValue(incomeValue);
         setIncomeValue(incomeValue);
 
         if(incomeValue !== '')
         {
+            try {
+                //send post request to the 'api/users' endpoint
+                const response = await axios.post('http://localhost:5000/api/summary', { 
+                    income: incomeValue,
+                });
+                console.log("Response = " + response.data);
+
+                const res = await axios.get('http://localhost:5000/api/findUsers/:email', {
+                    email: "jonty@email.com",
+                });
+                console.log("server data: " + res.data);
+            } catch (error) {
+                console.error(error);
+            }
           sessionStorage.setItem("income_value", income_inputRef.current.value);
               
           incomeInput();
           income_inputRef.current.value = '$' + parseFloat(incomeValue).toLocaleString('en-US', {'minimumFractionDigits':2,'maximumFractionDigits':2});
         }else{
+
+            try {
+                //send post request to the 'api/users' endpoint
+                const response = await axios.post('http://localhost:5000/api/summary', { 
+                    income: incomeValue,
+                });
+                console.log("Response = " + response.data.income);  
+            } catch (error) {
+                console.error(error);
+            }
           setIncomeValue('');
           sessionStorage.setItem("income_value", income_inputRef.current.value);
           incomeInput();
