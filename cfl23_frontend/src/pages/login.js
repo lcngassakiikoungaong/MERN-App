@@ -37,6 +37,7 @@ function Login() {
                 console.log("axios error: ", error);
             });
             sessionStorage.setItem('userID', response.data[0]._id);
+            alert("user email: " + response.data[0].email + "\n" + "user ID: " + response.data[0]._id);
 
         } catch (error) {
             console.error("try catch error: ", error);
