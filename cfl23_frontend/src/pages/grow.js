@@ -12,6 +12,9 @@ import axios from 'axios';
 function Grow() {
         let [total, setTotal] = useState(parseFloat(sessionStorage.getItem("growTotal") || 0));
         let [rows, setRows] = useState(JSON.parse(sessionStorage.getItem("growTableRows")) || []);
+        const [isMobile] = useState(window.innerWidth <= 480);
+        const descriptionHeader = isMobile ? "Desc." : "Description";
+        const amntHeader = isMobile ? "Amnt." : "Amount";
         let amntRef = useRef(null);
 
         
@@ -202,9 +205,9 @@ return (
                 <thead>
                 <tr>
                     <th>Category</th>
-                    <th>Description</th>
+                    <th>{descriptionHeader}</th>
                     <th>Date</th>
-                    <th>Amount</th>
+                    <th>{amntHeader}</th>
                     <th>Action</th>
                 </tr>
                 </thead>

@@ -360,34 +360,6 @@ h3 {
   transition: 0.4s;
 }
 
-/*
-    .button1:active, .button2:active {
-      box-shadow: 0 4px 4px 0 rgb(60 64 67 / 30%), 0 8px 12px 6px rgb(60 64 67 / 15%);
-      outline: none;
-    }
-    
-    
-    .button1:not(:disabled), .button2:not(:disabled) {
-      box-shadow: rgba(60, 64, 67, .3) 0 1px 3px 0, rgba(60, 64, 67, .15) 0 4px 8px 3px;
-    }
-    
-    .button1:not(:disabled):hover, .button2:not(:disabled):hover{
-      box-shadow: rgba(60, 64, 67, .3) 0 2px 3px 0, rgba(60, 64, 67, .15) 0 6px 10px 4px;
-    }
-    
-    .button1:not(:disabled):focus, .button2:not(:disabled):focus {
-      box-shadow: rgba(60, 64, 67, .3) 0 1px 3px 0, rgba(60, 64, 67, .15) 0 4px 8px 3px;
-    }
-    
-    .button1:not(:disabled):active, .button2:not(:disabled):active {
-      box-shadow: rgba(60, 64, 67, .3) 0 4px 4px 0, rgba(60, 64, 67, .15) 0 8px 12px 6px;
-    }
-    
-    .button1:disabled, .button2:disabled {
-      box-shadow: rgba(60, 64, 67, .3) 0 1px 3px 0, rgba(60, 64, 67, .15) 0 4px 8px 3px;
-    }
-    */
-
 /************************ Pie chart section ************************/
 
 .pie-chart {
@@ -458,6 +430,7 @@ h3 {
 /*Alternate pie chart*/
 .pie-header1 {
   text-align: center;
+  margin: auto;
 }
 
 .alt-chart {
@@ -465,13 +438,9 @@ h3 {
   justify-content: center;
 }
 
-
-.pie-header {
-  margin: auto;
-}
-
 #chartError {
   margin: auto;
+  padding-top: 10px;
 }
 /* Allows columns to fit within an iphone view */
 @media screen and (max-width: 700px) {

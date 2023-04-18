@@ -55,7 +55,7 @@ function Register() {
             </>
 
             <section className="container">
-                <div className="form login">
+                <div className="form login" id="regis">
                     <div className="form-content">
                         <header>Register</header>
                         <form action="#" onSubmit={handleSubmit}>

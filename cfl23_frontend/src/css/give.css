@@ -138,3 +138,43 @@ h3 {
   opacity: 1;
 }
 /*****End of Section 2*****/
+
+@media screen and (max-width: 700px) {
+  #form-header {
+    font-size: 30px;
+    padding-top: 20px;
+  }
+
+  .text-box h1 {
+    font-size: 30px;
+  }
+
+  .text-box hr {
+    width: 60%;
+  }
+
+  .tbl {
+    width: 100%;
+  }
+
+  .table th {
+    font-size: 14px;
+  }
+
+  #tbl td {
+    font-size: 10px;
+  }
+
+  #tbl thead th {
+    text-align: center;
+  }
+
+  table td {
+    max-height: 40px;
+  }
+
+  #deleteBtn {
+    align-items: center;
+    padding-right: 20px;
+  }
+}

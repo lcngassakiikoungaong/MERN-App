@@ -42,14 +42,6 @@ table td {
   max-height: 50px;
 }
 
-@media screen and (max-width: 700px) {
-  #form-header{
-    font-size: 30px;
-    padding-top: 20px;
-  }
-}
-
-
 th:first-child,
 td:first-child {
   width: 70%;
@@ -148,37 +140,37 @@ h1 {
   margin: auto;
 }
 
-@media only screen and (max-width: 390px) {
-  .tbl {
+
+@media screen and (max-width: 700px) {
+  #form-header {
+    font-size: 30px;
+    padding-top: 20px;
+  }
+  .text-box h1 {
+    font-size: 30px;
+  }
+
+  .text-box hr {
+    width: 60%;
+  }
+
+  .tbl{
     width: 100%;
   }
-}
 
-@media only screen and (max-width: 600px) {
   .table th {
     font-size: 14px;
   }
-}
 
-@media only screen and (max-width: 480px) {
   #tbl td {
     font-size: 10px;
   }
-}
 
-@media (max-width: 600px) {
   #tbl thead th {
     text-align: center;
   }
-}
 
-@media (max-width: 768px) {
   table td {
     max-height: 40px;
-    text-align: center;
-  }
-
-  td button {
-    align-items: center;
   }
 }
