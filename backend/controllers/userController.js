@@ -15,7 +15,7 @@ exports.createUser = async (req, res) => { //Exports a single function, 'createU
 exports.findUser = async (req, res) => { //Exports a single function, 'findUser'
     try{
         User.find({
-            email: "jonty@email.com"
+            email: req.params.email
         })
         .then((data) => {
             console.log("data = ", data);
