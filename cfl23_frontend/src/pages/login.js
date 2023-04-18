@@ -16,7 +16,6 @@ function Login() {
             fetch("https://jsonplaceholder.typicode.com/posts")
                 .then((response) => response.json())
                 .then((json) => {
-                    console.log(json);
                     setData(json);
                     setloading(true);
                 });
@@ -49,11 +48,11 @@ function Login() {
                                 <header>Login</header>
                                 <form action="#">
                                     <div className="field input-field">
-                                        <input type="email" placeholder="Email" className="input" value={email} onChange={(email) => setEmail(email)} />
+                                        <input type="email" placeholder="Email" className="input" value={email} onChange={(e) => setEmail(e.target.value)} />
                                     </div>
 
                                     <div className="field input-field">
-                                        <input type="password" placeholder="Password" className="password" value={password} onChange={(password) => setPassword(password)} />
+                                        <input type="password" placeholder="Password" className="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                                         <i className="bx bx-hide eye-icon"></i>
                                     </div>
 
