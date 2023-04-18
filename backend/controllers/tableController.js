@@ -3,6 +3,10 @@ const giveSchema = require('../models/giveSchema');
 const growSchema = require('../models/growSchema');
 const oweSchema = require('../models/oweSchema');
 
+
+
+//************ POST API Functions *************/
+
 exports.createLiveRow = async (req, res) => { //Exports a single function, 'createLiveRow'
     try{
         const liveRow = new liveSchema(req.body);
@@ -50,4 +54,8 @@ exports.createOweRow = async (req, res) => { //Exports a single function, 'creat
         res.status(400).json( { message: error.message });                            
     }
 };
+
+
+//************ GET API Functions *************/
+
 
