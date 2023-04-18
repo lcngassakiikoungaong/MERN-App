@@ -161,6 +161,11 @@ form .field {
 
 @media screen and (max-width: 700px){
     .form {
-        padding: 15px 1;
+        height: 390px;
+        width: 310px;
+    }
+    #regis {
+        height: 550px;
+        width: 310px;
     }
 }
