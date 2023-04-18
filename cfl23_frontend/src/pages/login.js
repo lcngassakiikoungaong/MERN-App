@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "../css/login.css";
 import LoadingLogo from "../images/logo.jpeg";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Login() {
-
+    const navigate = useNavigate();
     // eslint-disable-next-line no-unused-vars
     const [data, setData] = useState([]);
     const [loading, setloading] = useState(undefined);
@@ -21,6 +22,28 @@ function Login() {
                 });
         }, 2000);
     }, []);
+
+
+    const handleSubmit = async (e) => { //onSubmit --> post
+        e.preventDefault();
+        try{
+            //send post request to the 'api/users' endpoint
+            const response = await axios
+            .get(`http://localhost:5000/api/findUsers/${email}`)
+            .then(
+                // response will now hold the response data
+            )
+            .catch((error) => {
+                console.log("axios error: ", error);
+            });
+            sessionStorage.setItem('userID', response.data[0]._id);
+
+        } catch (error) {
+            console.error("try catch error: ", error);
+        }
+
+        navigate('/summary');
+    };
 
 
     return (
@@ -46,7 +69,7 @@ function Login() {
                         <div className="form login">
                             <div className="form-content">
                                 <header>Login</header>
-                                <form action="#">
+                                <form action="#" onSubmit={handleSubmit}>
                                     <div className="field input-field">
                                         <input type="email" placeholder="Email" className="input" value={email} onChange={(e) => setEmail(e.target.value)} />
                                     </div>
@@ -61,7 +84,7 @@ function Login() {
                                     </div>
 
                                     <div className="field button-field">
-                                        <NavLink to="./summary"><button type="button">Login</button></NavLink>
+                                        <button type="submit">Login</button>
                                     </div>
 
                                     <div className="form-link">

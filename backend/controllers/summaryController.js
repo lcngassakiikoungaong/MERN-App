@@ -1,5 +1,8 @@
 const Summary = require('../models/summarySchema');
 
+
+//*** POST APIS ***/
+
 exports.createSummary = async (req, res) => { //Exports a single function, 'createUser'
     try{
         const summary = new Summary(req.body);

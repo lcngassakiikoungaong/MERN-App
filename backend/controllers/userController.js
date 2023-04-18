@@ -1,5 +1,8 @@
 const User = require('../models/user');
 
+
+//************ POST API Functions *************/
+
 exports.createUser = async (req, res) => { //Exports a single function, 'createUser'
     try{
         const user = new User(req.body);
@@ -11,6 +14,9 @@ exports.createUser = async (req, res) => { //Exports a single function, 'createU
         res.status(400).json( { message: error.message });
     }
 };
+
+
+//************ GET API Functions *************/
 
 exports.findUser = async (req, res) => { //Exports a single function, 'findUser'
     try{
