@@ -4,8 +4,14 @@ import Navbar from '../components/navbar';
 import Footer from '../components/footer';
 import "../css/summary.css";
 import axios from "axios";
+import 'chartjs-plugin-datalabels';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+Chart.register(ChartDataLabels);
+//import ChartDataLabels from 'chartjs-plugin-labels';
+
 
 function Summary() {
+    
     //Finance bar DOM container
     let live_barRef = useRef(null);
     let owe_barRef = useRef(null);
@@ -58,7 +64,7 @@ function Summary() {
 
     /****Update Page Session Values on Refresh ****/
     let updateSession = () => {
-
+        
         incomeInput();
 
         //Update Pie Chart
@@ -310,7 +316,8 @@ function Summary() {
                         hoverBackgroundColor: nonZeroHoverColors,
                         data: nonZeroData,
                         datalabels: {
-                        color: 'white'
+                        color: '#fff',
+                        labels: null
                         },
                         animation: {
                         duration: 2000
@@ -318,44 +325,50 @@ function Summary() {
                     }]
                     },
                     options: {
-                    plugins: {
-                        datalabels: {
-                        display: true,
-                        formatter: function(data) {
-                            let newData = data / expenseTotal * 100;
-                            return newData.toFixed(1) + '%';
-                        },
-                        function (value, index, values) {
-                            if (value > 0) {
-                            value = value.toString();
-                            value = value.split(/(?=(?:...)*$)/);
-                            value = value.join(",");
-                            return value;
-                            } else {
-                            value = "";
-                            return value;
-                            }
-                        },
-                                function (value, index, values) {
-                                    if (value > 0) {
-                                    value = value.toString();
-                                    value = value.split(/(?=(?:...)*$)/);
-                                    value = value.join(",");
-                                    return value;
-                                    } else {
-                                    value = "";
-                                    return value;
-                                    }
-                                }}
-                        },
-                    animation: {
-                        
-                        animateRotate: true,
-                        animateScale: true,
-                        //duration: 2000
-                    }
-                    }
-                }); 
+                        plugins: {
+                            datalabels: {
+                            color: '#fff',
+                            font: {
+                                size: 14
+                            },
+                            display: true,
+                            formatter: function(data) {
+                                let newData = data / expenseTotal * 100;
+                                return newData.toFixed(1) + '%';
+                            },
+                            /*formatter: function(value, context) {
+                                let percentage = ((value / expenseTotal) * 100).toFixed(1) + '%';
+                                return percentage;
+                              },*/
+                             /* formatter: function(value, context) {
+                                let percentage = ((value / sum) * 100).toFixed(1) + '%';
+                                return percentage;
+                              },*/
+                            function (value, index, values) {
+                                if (value > 0) {
+                                value = value.toString();
+                                value = value.split(/(?=(?:...)*$)/);
+                                value = value.join(",");
+                                return value;
+                                } else {
+                                value = "";
+                                return value;
+                                }
+                            },
+                            display: function(context) {
+                                return context.dataset.data[context.dataIndex] > 0; // only display labels for non-zero values
+                              },
+                        color: 'white'}
+                            },
+                        animation: {
+                            
+                            animateRotate: true,
+                            animateScale: true,
+                            //duration: 2000
+                        }
+                        }
+                    }); 
+    
 
                 setChart(chart);
             }
