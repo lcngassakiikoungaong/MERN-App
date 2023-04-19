@@ -18,6 +18,40 @@ function Owe() {
         let amntRef = useRef(null);
 
         
+        let createMongoRow = async (uid, cate, desc, date, amnt, rIndex) => 
+        {
+            try {
+                //send post request to the 'api/users' endpoint
+
+                const response = await axios.post('http://localhost:5000/api/oweRow', { 
+                    userID: uid,
+                    category: cate,
+                    description: desc,
+                    date: date,
+                    amount: amnt,
+                    rowIndex: rIndex,
+                });
+                console.log("Response = " + response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        let deleteMongoRow = async (uid, rIndex) => 
+        {
+            try {
+                //send post request to the 'api/users' endpoint
+
+                const response = await axios.post('http://localhost:5000/api/deleteOweRow', { 
+                    userID: uid,
+                    rowIndex: rIndex,
+                });
+                console.log("Response = " + response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
         let validateValue = (amnt) => {
           let regX = /\D+/g;
 
@@ -50,25 +84,9 @@ function Owe() {
           
               setRows([...rows, { cate: category, prdr: description, date, formatAmnt }]);
               sessionStorage.setItem("oweTableRows", JSON.stringify([...rows, { cate: category, prdr: description, date, formatAmnt }]));
-              try {
-                  //send post request to the 'api/users' endpoint
-                  console.log(category);
-                  console.log(description);
-                  console.log(date);
-                  console.log(amount);
-                  console.log(rowIndex);
+              
+              createMongoRow(sessionStorage.getItem('userID'), category, description, date, amount, rowIndex);
 
-                  const response = await axios.post('http://localhost:5000/api/oweRow', { 
-                      category,
-                      description,
-                      date,
-                      amount,
-                      rowIndex,
-                  });
-                  console.log("Response = " + response.data);
-              } catch (error) {
-                  console.error(error);
-              }
           }
       };
     
@@ -83,6 +101,9 @@ function Owe() {
             let updatedRows = rows.filter((_, i) => i !== index);
             setRows(updatedRows);
             sessionStorage.setItem("oweTableRows", JSON.stringify(updatedRows));
+
+            deleteMongoRow(sessionStorage.getItem('userID'), index+1);
+
         };
 
         let [category, setCategory] = useState('');

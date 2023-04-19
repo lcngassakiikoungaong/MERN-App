@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const giveSchema = new mongoose.Schema({
+    userID: {
+        type: String,
+        unqiue: true,
+        required: true,
+    },
     category: {
         type: String,
         required: true,

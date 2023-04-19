@@ -4,7 +4,6 @@ import Navbar from '../components/navbar';
 import Footer from '../components/footer';
 import "../css/summary.css";
 import axios from "axios";
-import 'chartjs-plugin-datalabels';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 Chart.register(ChartDataLabels);
 //import ChartDataLabels from 'chartjs-plugin-labels';
@@ -122,43 +121,41 @@ function Summary() {
         }
         return amnt;
       }
-    
-      let handleIncomeFocusOut = async () => { 
+
+      let createMongoRow = async (uid, incomeVal) => {
+        try {
+            //send post request to the 'api/users' endpoint
+            const response = await axios.post('http://localhost:5000/api/summary', { 
+                userID: uid,
+                income: incomeVal,
+            });
+            console.log("Response = " + response.data);
+
+        } catch (error) {
+            console.error(error);
+        }
+
+        sessionStorage.setItem("income_value", income_inputRef.current.value);
+      } 
+
+      let updateMongoRow = async () => {
+
+      }
+
+            
+      let handleIncomeFocusOut = async () => { //Sets incomeValues. 
         
         incomeValue = validateValue(incomeValue);
         setIncomeValue(incomeValue);
 
         if(incomeValue !== '')
         {
-            try {
-                //send post request to the 'api/users' endpoint
-                const response = await axios.post('http://localhost:5000/api/summary', { 
-                    income: incomeValue,
-                });
-                console.log("Response = " + response.data);
-
-                const res = await axios.get('http://localhost:5000/api/findUsers/:email', {
-                    email: "jonty@email.com",
-                });
-                console.log("server data: " + res.data);
-            } catch (error) {
-                console.error(error);
-            }
-          sessionStorage.setItem("income_value", income_inputRef.current.value);
+            createMongoRow(sessionStorage.getItem('userID'), incomeValue); //update Mongo database
               
-          incomeInput();
-          income_inputRef.current.value = '$' + parseFloat(incomeValue).toLocaleString('en-US', {'minimumFractionDigits':2,'maximumFractionDigits':2});
+            incomeInput();
+            income_inputRef.current.value = '$' + parseFloat(incomeValue).toLocaleString('en-US', {'minimumFractionDigits':2,'maximumFractionDigits':2});
         }else{
-
-            try {
-                //send post request to the 'api/users' endpoint
-                const response = await axios.post('http://localhost:5000/api/summary', { 
-                    income: incomeValue,
-                });
-                console.log("Response = " + response.data.income);  
-            } catch (error) {
-                console.error(error);
-            }
+        
           setIncomeValue('');
           sessionStorage.setItem("income_value", income_inputRef.current.value);
           incomeInput();
@@ -433,10 +430,6 @@ function Summary() {
             }
 
         }, [isInViewPort])
-        
-
-
-
                 
     return (
 

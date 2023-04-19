@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 
 const growSchema = new mongoose.Schema({
+    
+    userID: {
+        type: String,
+        unqiue: true,
+        required: true,
+    },
     category: {
         type: String,
         required: true,

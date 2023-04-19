@@ -24,7 +24,6 @@ exports.findUser = async (req, res) => { //Exports a single function, 'findUser'
             email: req.params.email
         })
         .then((data) => {
-            console.log("data = ", data);
             res.json(data);
         })
         .catch((error) => {

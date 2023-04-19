@@ -18,6 +18,40 @@ function Live() {
     const amntHeader = isMobile ? "Amnt." : "Amount";
     let amntRef = useRef(null);
 
+
+        let createMongoRow = async (uid, cate, desc, date, amnt, rIndex) => 
+        {
+            try {
+                //send post request to the 'api/users' endpoint
+
+                const response = await axios.post('http://localhost:5000/api/liveRow', { 
+                    userID: uid,
+                    category: cate,
+                    description: desc,
+                    date: date,
+                    amount: amnt,
+                    rowIndex: rIndex,
+                });
+                console.log("Response = " + response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        let deleteMongoRow = async (uid, rIndex) => 
+        {
+            try {
+                //send post request to the 'api/users' endpoint
+
+                const response = await axios.post('http://localhost:5000/api/deleteLiveRow', { 
+                    userID: uid,
+                    rowIndex: rIndex,
+                });
+                console.log("Response = " + response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        }
         
         let validateValue = (amnt) => {
           let regX = /\D+/g;
@@ -35,7 +69,7 @@ function Live() {
         }
 
 
-        let onAddWebsite = async (e) => {
+        let onAddWebsite = (e) => {
             e.preventDefault();
 
             let category = e.target.elements.Category.value;
@@ -53,25 +87,8 @@ function Live() {
             
                 setRows([...rows, { cate: category, prdr: description, date, formatAmnt }]);
                 sessionStorage.setItem("liveTableRows", JSON.stringify([...rows, { cate: category, prdr: description, date, formatAmnt }]));
-                try {
-                    //send post request to the 'api/users' endpoint
-                    console.log(category);
-                    console.log(description);
-                    console.log(date);
-                    console.log(amount);
-                    console.log(rowIndex);
-
-                    const response = await axios.post('http://localhost:5000/api/liveRow', { 
-                        category,
-                        description,
-                        date,
-                        amount,
-                        rowIndex,
-                    });
-                    console.log("Response = " + response.data);
-                } catch (error) {
-                    console.error(error);
-                }
+                
+                createMongoRow(sessionStorage.getItem('userID'), category, description, date, amount, rowIndex);
             }
         
         
@@ -88,9 +105,14 @@ function Live() {
             let updatedRows = rows.filter((_, i) => i !== index);
             setRows(updatedRows);
             sessionStorage.setItem("liveTableRows", JSON.stringify(updatedRows));
+
+            deleteMongoRow(sessionStorage.getItem('userID'), index+1);
         };
 
-        let [category, setCategory] = useState('');
+
+
+
+    let [category, setCategory] = useState('');
 
         let handleCategoryChange = (event) => {
             setCategory(event.target.value);
