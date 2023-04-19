@@ -32,7 +32,7 @@ function Live() {
                     amount: amnt,
                     rowIndex: rIndex,
                 });
-                console.log("Response = " + response.data);
+                console.log(response.data);
             } catch (error) {
                 console.error(error);
             }
@@ -47,7 +47,23 @@ function Live() {
                     userID: uid,
                     rowIndex: rIndex,
                 });
-                console.log("Response = " + response.data);
+                console.log(response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        let getMongoRows = async (uid) =>
+        {
+            try {
+                //send post request to the 'api/users' endpoint
+
+                const response = await axios.post('http://localhost:5000/api/getLiveRow', { 
+                    userID: uid,
+                });
+                console.log(response.data);
+
+                
             } catch (error) {
                 console.error(error);
             }

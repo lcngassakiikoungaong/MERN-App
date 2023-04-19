@@ -22,6 +22,10 @@ router.post('/deleteGiveRow', tableController.deleteGiveRow);
 router.post('/deleteGrowRow', tableController.deleteGrowRow);
 router.post('/deleteOweRow', tableController.deleteOweRow);
 
+//Retrieval Database Functions
+router.post('/getLiveRow', tableController.getLiveRow);
+
+
 
 //************ GET API Endpoints *************/
 
