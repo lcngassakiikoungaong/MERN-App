@@ -233,7 +233,7 @@ return (
                     {rows.map((row, index) => (
                         <tr key={index}>
                             <td>{row.cate}</td>
-                            <td>{row.prdr}</td>
+                            <td id="desp">{row.prdr}</td>
                             <td>{row.date}</td>
                             <td>{row.formatAmnt}</td>
                             <td><button id="deleteBtn" onClick={() => onDeleteRow(index)}>Delete</button></td>

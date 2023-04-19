@@ -283,4 +283,19 @@ h1 {
     align-items: center;
     padding-right: 20px;
   }
+
+  #deleteBtn {
+    position: relative;
+    padding-left: 10px;   
+  }
+
+  button {
+    position: absolute;
+    right: 10px;
+  }
+
+  #desp {
+    position: relative;
+    padding-left: 10px;
+  }
 }
