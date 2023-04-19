@@ -58,6 +58,7 @@ exports.createOweRow = async (req, res) => { //Exports a single function, 'creat
 };
 
 //------------DELETE FUNCTIONS ---------------
+
 exports.deleteLiveRow = async (req, res) => {
     try{
         const id = req.body.userID; //extract ID
@@ -128,6 +129,27 @@ exports.deleteOweRow = async (req, res) => {
             return res.status(400).json({ message: 'Data not found' })
         }
         res.status(200).json({ message: 'Data deleted successfully', data: deletedData });
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+//--------RETRIEVAL FUNCTIONS------------
+
+exports.getLiveRow = async (req, res) => {
+    try{
+        const id = req.body.userID; //extract ID
+
+        const responseData = await liveSchema.find( { 
+             userID: id 
+        });
+
+        if(!deletedData) {
+            return res.status(400).json({ message: 'Data not found' })
+        }
+        res.status(200).json({ data: responseData });
 
     } catch (error) {
         res.status(500).json({ message: error.message });
