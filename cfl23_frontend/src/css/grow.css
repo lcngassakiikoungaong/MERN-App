@@ -296,4 +296,19 @@ h3 {
     max-height: 40px;
   }
 
+  #deleteBtn {
+    position: relative;
+    padding-left: 10px;   
+  }
+
+  button {
+    position: absolute;
+    right: 10px;
+  }
+
+  #desp {
+    position: relative;
+    padding-left: 10px;
+  }
+
 }

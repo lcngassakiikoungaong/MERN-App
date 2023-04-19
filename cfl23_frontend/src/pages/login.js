@@ -13,18 +13,6 @@ function Login() {
     const [password, setPassword] = useState('');
     const [errorMes, setErrorMes] = useState('');
 
-    useEffect(() => { //loading screen timer
-        setTimeout(() => {
-            fetch("https://jsonplaceholder.typicode.com/posts")
-                .then((response) => response.json())
-                .then((json) => {
-                    setData(json);
-                    setloading(true);
-                });
-        }, 2000);
-    }, []);
-
-
     const handleSubmit = async (e) => { //onSubmit --> post
         e.preventDefault();
         try{
@@ -58,11 +46,6 @@ function Login() {
 
     return (
         <>
-            {!loading ? (
-                <div className="spinner">
-                    <span><img src={LoadingLogo} alt="LoadingLogo" /></span>
-                </div>
-            ) : (
                 <>
                     <meta charSet="UTF-8" />
                     <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -73,7 +56,7 @@ function Login() {
                         rel="stylesheet" />
                     <link rel="preconnect" href="https://fonts.googleapis.com" />
                     <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-
+                </>
 
                     <section className="container">
                         <div className="form login">
@@ -105,8 +88,6 @@ function Login() {
                             </div>
                         </div>
                     </section>
-                </>
-            )}
         </>
     );
 }

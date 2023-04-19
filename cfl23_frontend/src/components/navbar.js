@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "../css/shared_css/navbar.css";
 import { Link} from 'react-router-dom';
-import logopic from '../images/cfl-logo-new.png';
 
 class Navbar extends Component {
     state = {clicked: false};
