@@ -7,6 +7,8 @@ const oweSchema = require('../models/oweSchema');
 
 //************ POST API Functions *************/
 
+
+//------------CREATE FUNCTIONS ---------------
 exports.createLiveRow = async (req, res) => { //Exports a single function, 'createLiveRow'
     try{
         const liveRow = new liveSchema(req.body);
@@ -55,6 +57,82 @@ exports.createOweRow = async (req, res) => { //Exports a single function, 'creat
     }
 };
 
+//------------DELETE FUNCTIONS ---------------
+exports.deleteLiveRow = async (req, res) => {
+    try{
+        const id = req.body.userID; //extract ID
+        const rIndex = req.body.rowIndex; //extract index
+
+        const deletedData = await liveSchema.findOneAndDelete( { 
+            $and: [ { userID: id }, { rowIndex: rIndex }]
+        });
+
+        if(!deletedData) {
+            return res.status(400).json({ message: 'Data not found' })
+        }
+        res.status(200).json({ message: 'Data deleted successfully', data: deletedData });
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+exports.deleteGiveRow = async (req, res) => {
+    try{
+        const id = req.body.userID; //extract ID
+        const rIndex = req.body.rowIndex; //extract index
+
+        const deletedData = await giveSchema.findOneAndDelete( { 
+            $and: [ { userID: id }, { rowIndex: rIndex }]
+        });
+
+        if(!deletedData) {
+            return res.status(400).json({ message: 'Data not found' })
+        }
+        res.status(200).json({ message: 'Data deleted successfully', data: deletedData });
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+exports.deleteGrowRow = async (req, res) => {
+    try{
+        const id = req.body.userID; //extract ID
+        const rIndex = req.body.rowIndex; //extract index
+
+        const deletedData = await growSchema.findOneAndDelete( { 
+            $and: [ { userID: id }, { rowIndex: rIndex }]
+        });
+
+        if(!deletedData) {
+            return res.status(400).json({ message: 'Data not found' })
+        }
+        res.status(200).json({ message: 'Data deleted successfully', data: deletedData });
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+exports.deleteOweRow = async (req, res) => {
+    try{
+        const id = req.body.userID; //extract ID
+        const rIndex = req.body.rowIndex; //extract index
+
+        const deletedData = await oweSchema.findOneAndDelete( { 
+            $and: [ { userID: id }, { rowIndex: rIndex }]
+        });
+
+        if(!deletedData) {
+            return res.status(400).json({ message: 'Data not found' })
+        }
+        res.status(200).json({ message: 'Data deleted successfully', data: deletedData });
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
 //************ GET API Functions *************/
 

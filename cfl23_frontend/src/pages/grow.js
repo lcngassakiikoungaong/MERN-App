@@ -18,6 +18,40 @@ function Grow() {
         let amntRef = useRef(null);
 
         
+        let createMongoRow = async (uid, cate, desc, date, amnt, rIndex) => 
+        {
+            try {
+                //send post request to the 'api/users' endpoint
+
+                const response = await axios.post('http://localhost:5000/api/growRow', { 
+                    userID: uid,
+                    category: cate,
+                    description: desc,
+                    date: date,
+                    amount: amnt,
+                    rowIndex: rIndex,
+                });
+                console.log("Response = " + response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        let deleteMongoRow = async (uid, rIndex) => 
+        {
+            try {
+                //send post request to the 'api/users' endpoint
+
+                const response = await axios.post('http://localhost:5000/api/deleteGrowRow', { 
+                    userID: uid,
+                    rowIndex: rIndex,
+                });
+                console.log("Response = " + response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
         let validateValue = (amnt) => {
           let regX = /\D+/g;
           
@@ -51,27 +85,10 @@ function Grow() {
           
               setRows([...rows, { cate: category, prdr: description, date, formatAmnt }]);
               sessionStorage.setItem("growTableRows", JSON.stringify([...rows, { cate: category, prdr: description, date, formatAmnt }]));
-              try {
-                  //send post request to the 'api/users' endpoint
-                  console.log(category);
-                  console.log(description);
-                  console.log(date);
-                  console.log(amount);
-                  console.log(rowIndex);
-
-                  const response = await axios.post('http://localhost:5000/api/growRow', { 
-                      category,
-                      description,
-                      date,
-                      amount,
-                      rowIndex,
-                  });
-                  console.log("Response = " + response.data);
-              } catch (error) {
-                  console.error(error);
-              }
+             
+              createMongoRow(sessionStorage.getItem('userID'), category, description, date, amount, rowIndex);
           }
-      };
+        };
 
         let onDeleteRow = (index) => {
           let rowToDelete = rows[index];
@@ -84,9 +101,13 @@ function Grow() {
           let updatedRows = rows.filter((_, i) => i !== index);
           setRows(updatedRows);
           sessionStorage.setItem("growTableRows", JSON.stringify(updatedRows));
-      };
+         
+         
+          deleteMongoRow(sessionStorage.getItem('userID'), index+1);
 
-        let [category, setCategory] = useState('');
+        };
+
+      let [category, setCategory] = useState('');
 
         let handleCategoryChange = (event) => {
             setCategory(event.target.value);

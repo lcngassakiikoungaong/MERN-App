@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 
 const liveSchema = new mongoose.Schema({
+
+    userID: {
+        type: String,
+        unqiue: true,
+        required: true,
+    },
     category: {
         type: String,
         required: true,
