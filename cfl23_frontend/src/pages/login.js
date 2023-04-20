@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "../css/login.css";
-import LoadingLogo from "../images/logo.jpeg";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -8,7 +7,6 @@ function Login() {
     const navigate = useNavigate();
     // eslint-disable-next-line no-unused-vars
     const [data, setData] = useState([]);
-    const [loading, setloading] = useState(undefined);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMes, setErrorMes] = useState('');
@@ -43,6 +41,13 @@ function Login() {
         }
     };
 
+    //show or hide password
+    const [state, setState] = useState(false);
+
+    const toggleBtn = () => {
+        setState(prevState => !prevState);
+    }
+
 
     return (
         <>
@@ -69,8 +74,10 @@ function Login() {
                                     </div>
 
                                     <div className="field input-field">
-                                        <input type="password" placeholder="Password" className="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                                        <i className="bx bx-hide eye-icon"></i>
+                                        <input type={state ? "text" : "password"} placeholder="Password" className="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                        <div onClick={toggleBtn}>
+                                            <i className={state ? "bx bx-show eye-icon" : "bx bx-hide eye-icon"}></i>
+                                        </div>
                                     </div>
 
                                     <div className="form-link">
