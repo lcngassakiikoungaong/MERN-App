@@ -24,7 +24,8 @@ function Register() {
                 email,
                 password,
             });
-            console.log("Response = " + response.data);
+
+            sessionStorage.setItem('userID', response.date[0]._id);
             setFirstName('');
             setLastName('');
             setPassword('');

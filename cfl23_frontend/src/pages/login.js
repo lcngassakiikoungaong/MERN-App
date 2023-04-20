@@ -10,6 +10,107 @@ function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMes, setErrorMes] = useState('');
+    
+
+    let getMongoRows = async (uid) =>
+        {
+            try {
+                //send post request to the 'api/users' endpoint
+
+                const liveRow = await axios.post('http://localhost:5000/api/getLiveRow', { 
+                    userID: uid,
+                });
+                const giveRow = await axios.post('http://localhost:5000/api/getGiveRow', { 
+                    userID: uid,
+                });
+                const growRow = await axios.post('http://localhost:5000/api/getGrowRow', { 
+                    userID: uid,
+                });
+                const oweRow = await axios.post('http://localhost:5000/api/getOweRow', { 
+                    userID: uid,
+                });
+
+                const incomeTotal = await axios.post('http://localhost:5000/api/getSummary', { 
+                    userID: uid,
+                    type: 'incomeTotal',
+                });
+                const liveTotal = await axios.post('http://localhost:5000/api/getSummary', { 
+                    userID: uid,
+                    type: 'liveTotal',
+                });
+
+                const giveTotal = await axios.post('http://localhost:5000/api/getSummary', { 
+                    userID: uid,
+                    type: 'giveTotal',
+                });
+
+                const growTotal = await axios.post('http://localhost:5000/api/getSummary', { 
+                    userID: uid,
+                    type: 'growTotal',
+                });
+                const oweTotal = await axios.post('http://localhost:5000/api/getSummary', { 
+                    userID: uid,
+                    type: 'oweTotal',
+                });
+                
+
+                //Set session storage items for Expense Table Rows
+                sessionStorage.setItem('liveTableRows', JSON.stringify(liveRow.data.data));
+                sessionStorage.setItem('giveTableRows', JSON.stringify(giveRow.data.data));
+                sessionStorage.setItem('growTableRows', JSON.stringify(growRow.data.data));
+                sessionStorage.setItem('oweTableRows', JSON.stringify(oweRow.data.data));
+
+                //Set session storage values for Summary Page Totals
+                if (incomeTotal.data.data.length > 0)
+                {
+                    console.log(incomeTotal.data.data);
+                    sessionStorage.setItem('income_value', incomeTotal.data.data[0].financeTotal);
+                    sessionStorage.setItem('incomeExists', 1);
+                }else{
+                    sessionStorage.setItem('incomeExists', 0);
+                    sessionStorage.setItem('income_value', '');
+                }
+                if (liveTotal.data.data.length > 0)
+                {
+                    sessionStorage.setItem('liveTotal', liveTotal.data.data[0].financeTotal);
+                    sessionStorage.setItem('liveExists', 1);
+
+                }else{
+                    sessionStorage.setItem('liveExists', 0);
+                    sessionStorage.setItem('liveTotal', 0);
+                }
+                if (giveTotal.data.data.length > 0)
+                {
+                    sessionStorage.setItem('giveTotal', giveTotal.data.data[0].financeTotal);
+                    sessionStorage.setItem('giveExists', 1);
+
+                }else{
+                    sessionStorage.setItem('giveExists', 0);
+                    sessionStorage.setItem('giveTotal', 0);
+                }
+                if (growTotal.data.data.length > 0)
+                {
+                    sessionStorage.setItem('growTotal', growTotal.data.data[0].financeTotal);
+                    sessionStorage.setItem('growExists', 1);
+
+                }else{
+                    sessionStorage.setItem('growExists', 0);
+                    sessionStorage.setItem('growTotal', 0);
+                }
+                if (oweTotal.data.data.length > 0)
+                {
+                    sessionStorage.setItem('oweTotal', oweTotal.data.data[0].financeTotal);
+                    sessionStorage.setItem('oweExists', 1);
+                }else{
+                    sessionStorage.setItem('oweExists', 0);
+                    sessionStorage.setItem('oweTotal', 0);
+                }
+
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
 
     const handleSubmit = async (e) => { //onSubmit --> post
         e.preventDefault();
@@ -27,8 +128,9 @@ function Login() {
             //checks if password is correct
             if (response.data[0].password === password)
             {
-                //alert to show userID and email if login is correct
-                alert("user email: " + response.data[0].email + "\n" + "user ID: " + response.data[0]._id);
+                //load user data:
+                await getMongoRows(response.data[0]._id);// ran into big bug with session storage until I used 'await'
+
                 //navigates to summary after login has been authenticated
                 navigate('/summary');
             } else {
