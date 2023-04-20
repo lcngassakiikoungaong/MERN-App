@@ -39,7 +39,12 @@ function Register() {
         navigate('/summary');
     };
 
+    //show or hide password
+    const [state, setState] = useState(false);
 
+    const toggleBtn = () => {
+        setState(prevState => !prevState);
+    }
 
     return (
         <>
@@ -91,24 +96,26 @@ function Register() {
                             </div>
                             <div className="field input-field">
                                 <input
-                                    type="password"
+                                    type={state ? "text" : "password"}
                                     placeholder="Password"
                                     className="password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
                                 />
+                                <div onClick={toggleBtn}>
+                                    <i className={state ? "bx bx-show eye-icon" : "bx bx-hide eye-icon"}></i>
+                                </div>
                             </div>
                             <div className="field input-field">
                                 <input
-                                    type="password"
+                                    type={state ? "text" : "password"}
                                     placeholder="Confirm Password"
                                     className="password"
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                     required
                                 />
-                                <i className="bx bx-hide eye-icon"></i>
                             </div>
                             <div className="field button-field">
                                 <button type="submit">Register</button>
