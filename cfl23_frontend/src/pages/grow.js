@@ -196,7 +196,7 @@ return (
       
             <div className="input-box">
               <span className="details">Date</span>
-              <input type="date" id="DateInput" className="dateInput" placeholder="11/14/2022" name="Date" required />
+              <input type="date" id="DateInput" className="dateInput" placeholder="11/14/2022" name="Date" max="9999-12-31" required />
             </div>
       
             <div className="input-box">

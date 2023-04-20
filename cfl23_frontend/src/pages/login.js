@@ -70,11 +70,11 @@ function Login() {
                                 <form action="#" onSubmit={handleSubmit}>
                                     {errorMes && <p style={{color: "red"}}>{errorMes}</p>}
                                     <div className="field input-field">
-                                        <input type="email" placeholder="Email" className="input" value={email} onChange={(e) => setEmail(e.target.value)} />
+                                        <input type="email" placeholder="Email" className="input" value={email} onChange={(e) => setEmail(e.target.value)} required />
                                     </div>
 
                                     <div className="field input-field">
-                                        <input type={state ? "text" : "password"} placeholder="Password" className="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                        <input type={state ? "text" : "password"} placeholder="Password" className="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                                         <div onClick={toggleBtn}>
                                             <i className={state ? "bx bx-show eye-icon" : "bx bx-hide eye-icon"}></i>
                                         </div>
