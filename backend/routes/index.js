@@ -24,6 +24,16 @@ router.post('/deleteOweRow', tableController.deleteOweRow);
 
 //Retrieval Database Functions
 router.post('/getLiveRow', tableController.getLiveRow);
+router.post('/getGiveRow', tableController.getGiveRow);
+router.post('/getGrowRow', tableController.getGrowRow);
+router.post('/getOweRow', tableController.getOweRow);
+router.post('/getSummary', summaryController.getSummary);
+
+//Update Database Functions
+router.post('/updateSummary', summaryController.updateSummary);
+
+
+
 
 
 

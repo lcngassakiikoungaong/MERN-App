@@ -4,11 +4,14 @@ const summarySchema = new mongoose.Schema({
 
     userID: {
         type: String,
-        unique: true,
         required: true,
     },
-    income: {
+    financeTotal: {
         type: Number,
+        required: true,
+    },
+    type: {
+        type: String,
         required: true,
     },
 });

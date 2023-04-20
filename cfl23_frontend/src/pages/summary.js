@@ -36,6 +36,7 @@ function Summary() {
     let after_tax_divRef = useRef(null);
     let [afterTaxNum, setAfterTaxNum] = useState(parseFloat(sessionStorage.getItem("after_tax_num") || 0));
     let [incomeValue, setIncomeValue] = useState(parseFloat(sessionStorage.getItem("income_value")) || '');
+    let [incomeExists, setIncomeExists] = useState(parseInt(sessionStorage.getItem("incomeExists") || 0));
 
     // Pie Chart viewport Ref
     const pieViewportRef = useRef(null);
@@ -122,12 +123,13 @@ function Summary() {
         return amnt;
       }
 
-      let createMongoRow = async (uid, incomeVal) => {
+      let createMongoTotal = async (uid, incomeVal) => {
         try {
             //send post request to the 'api/users' endpoint
             const response = await axios.post('http://localhost:5000/api/summary', { 
                 userID: uid,
-                income: incomeVal,
+                financeTotal: incomeVal,
+                type: 'incomeTotal',
             });
             console.log("Response = " + response.data);
 
@@ -135,29 +137,48 @@ function Summary() {
             console.error(error);
         }
 
-        sessionStorage.setItem("income_value", income_inputRef.current.value);
+        sessionStorage.setItem("income_value", incomeVal);
       } 
 
-      let updateMongoRow = async () => {
+      let updateMongoTotal = async (uid, amnt, ty) => {
+        try {
+            //send post request to the 'api/users' endpoint
+            const response = await axios.post('http://localhost:5000/api/updateSummary', { 
+                userID: uid,
+                financeTotal: amnt,
+                type: ty,
+            });
+            console.log("Response = " + response.data);
 
+        } catch (error) {
+            console.error(error);
+        }
       }
 
             
       let handleIncomeFocusOut = async () => { //Sets incomeValues. 
         
         incomeValue = validateValue(incomeValue);
-        setIncomeValue(incomeValue);
 
         if(incomeValue !== '')
-        {
-            createMongoRow(sessionStorage.getItem('userID'), incomeValue); //update Mongo database
+        {            
+            if(incomeExists !== 0)
+            {
+                setIncomeValue(incomeValue);
+                updateMongoTotal(sessionStorage.getItem('userID'), incomeValue, 'incomeTotal');
+
+            }else{
+                createMongoTotal(sessionStorage.getItem('userID'), incomeValue); //update Mongo database
+                setIncomeExists(1);
+                sessionStorage.setItem('incomeExists', 1);
+            }           
               
             incomeInput();
             income_inputRef.current.value = '$' + parseFloat(incomeValue).toLocaleString('en-US', {'minimumFractionDigits':2,'maximumFractionDigits':2});
         }else{
         
           setIncomeValue('');
-          sessionStorage.setItem("income_value", income_inputRef.current.value);
+          sessionStorage.setItem("income_value", incomeValue);
           incomeInput();
         }
       };

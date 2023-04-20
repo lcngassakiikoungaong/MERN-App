@@ -12,6 +12,8 @@ import axios from 'axios';
 function Give() {
   let [total, setTotal] = useState(parseFloat(sessionStorage.getItem("giveTotal") || 0));
   let [rows, setRows] = useState(JSON.parse(sessionStorage.getItem("giveTableRows")) || []);
+  let [totalRows, setTotalRows] = useState(parseFloat(sessionStorage.getItem("totalRows")) || 0);
+  let [giveExists, setGiveExists] = useState(parseInt(sessionStorage.getItem('giveExists') || 0));
   const [isMobile] = useState(window.innerWidth <= 480);
   const descriptionHeader = isMobile ? "Desc." : "Description";
   const amntHeader = isMobile ? "Amnt." : "Amount";
@@ -31,11 +33,28 @@ function Give() {
                     amount: amnt,
                     rowIndex: rIndex,
                 });
-                console.log("Response = " + response.data);
+                console.log(response.data);
             } catch (error) {
                 console.error(error);
             }
         }
+
+        let createMongoTotal = async (uid, amnt, ty) => {
+
+          try {
+              //send post request to the 'api/users' endpoint
+              const response = await axios.post('http://localhost:5000/api/summary', { 
+                  userID: uid,
+                  financeTotal: amnt,
+                  type: ty,
+              });
+              console.log("Response = " + response.data);
+  
+          } catch (error) {
+              console.error(error);
+          }
+      
+      }
 
         let deleteMongoRow = async (uid, rIndex) => 
         {
@@ -50,6 +69,21 @@ function Give() {
             } catch (error) {
                 console.error(error);
             }
+        }
+
+        let updateMongoTotal = async (uid, amnt, ty) => {
+          try {
+              //send post request to the 'api/users' endpoint
+              const response = await axios.post('http://localhost:5000/api/updateSummary', { 
+                  userID: uid,
+                  financeTotal: amnt,
+                  type: ty,
+              });
+              console.log("Response = " + response.data);
+  
+          } catch (error) {
+              console.error(error);
+          }
         }
 
         let validateValue = (amnt) => {
@@ -67,41 +101,56 @@ function Give() {
         }
     
         let onAddWebsite = async (e) => {
-            e.preventDefault();
-            
-            let category = e.target.elements.Category.value;
-            let description = e.target.elements.Purchase.value;
-            let date = e.target.elements.Date.value;
-            let amount = parseFloat(validateValue(e.target.elements.Amount.value));
-            let rowIndex = parseFloat(rows.length+1);
-            
-            if(amount != 0)
-            {
-                let formatAmnt = '$' + amount.toLocaleString('en-US', {'minimumFractionDigits':2,'maximumFractionDigits':2});
-            
-                setTotal(parseFloat(total) + amount);
-                sessionStorage.setItem("giveTotal", parseFloat(total) + amount);
-            
-                setRows([...rows, { cate: category, prdr: description, date, formatAmnt }]);
-                sessionStorage.setItem("giveTableRows", JSON.stringify([...rows, { cate: category, prdr: description, date, formatAmnt }]));
-                
-                createMongoRow(sessionStorage.getItem('userID'), category, description, date, amount, rowIndex);
-            }
+          e.preventDefault();
+          let uid = sessionStorage.getItem('userID');
+          let category = e.target.elements.Category.value; 
+          let description = e.target.elements.Purchase.value;
+          let date = e.target.elements.Date.value;
+          let amount = parseFloat(validateValue(e.target.elements.Amount.value));
+          let rowIndex = totalRows;
+          setTotalRows(totalRows + 1);
+          sessionStorage.setItem('totalRows', totalRows);
+
+          
+          
+          if(amount != 0)
+          {        
+            let amnt = parseFloat(total) + amount;
+            setTotal(amnt);
+            sessionStorage.setItem("giveTotal", amnt);
+          
+              setRows([...rows, { category, description, date, amount, rowIndex }]);
+              sessionStorage.setItem("giveTableRows", JSON.stringify([...rows, { category, description, date, amount, rowIndex }]));
+              
+              createMongoRow(uid, category, description, date, amount, rowIndex);
+
+              if (giveExists !== 0)
+              {
+                  updateMongoTotal(uid, amnt, 'giveTotal');
+              }else{
+                  createMongoTotal(uid, amnt, 'giveTotal');
+                  setGiveExists(1);
+                  sessionStorage.setItem('giveExists', 1);
+              }
+          }       
+      
         };
     
-        let onDeleteRow = (index) => {
-            let rowToDelete = rows[index];
-            let amntToDelete = rowToDelete.formatAmnt;
+        let onDeleteRow = (row, index) => {
+          let rowToDelete = rows[index];
+          let amntToDelete = rowToDelete.amount;
+          let rowIndex = rowToDelete.rowIndex;
+          
+          console.log(row);
 
-            amntToDelete = amntToDelete.replace(/[$]|[,]/g, '');
-            setTotal(parseFloat(total) - parseFloat(amntToDelete));
-            sessionStorage.setItem("giveTotal", parseFloat(total) - parseFloat(amntToDelete));
-        
-            let updatedRows = rows.filter((_, i) => i !== index);
-            setRows(updatedRows);
-            sessionStorage.setItem("giveTableRows", JSON.stringify(updatedRows));
+          setTotal(parseFloat(total) - parseFloat(amntToDelete));
+          sessionStorage.setItem("giveTotal", parseFloat(total) - parseFloat(amntToDelete));
+      
+          let updatedRows = rows.filter((_, i) => i !== index);
+          setRows(updatedRows);
+          sessionStorage.setItem("giveTableRows", JSON.stringify(updatedRows));
 
-            deleteMongoRow(sessionStorage.getItem('userID'), index+1);
+          deleteMongoRow(sessionStorage.getItem('userID'), rowIndex);
         };
 
         let [category, setCategory] = useState('');
@@ -137,6 +186,11 @@ function Give() {
             }
             
         };
+
+        let formatDate = (date) => {
+          date = date.split('T')[0];
+          return date;
+        }
 
 return (
     <>
@@ -231,11 +285,11 @@ return (
                 <tbody>
                     {rows.map((row, index) => (
                         <tr key={index}>
-                        <td>{row.cate}</td>
-                        <td id="desp">{row.prdr}</td>
-                        <td>{row.date}</td>
-                        <td>{row.formatAmnt}</td>
-                        <td><button id="deleteBtn" onClick={() => onDeleteRow(index)}>Delete</button></td>
+                        <td>{row.category}</td>
+                        <td id="desp">{row.description}</td>
+                        <td>{formatDate(row.date)}</td>
+                        <td>{'$' + row.amount.toLocaleString('en-US', {'minimumFractionDigits':2,'maximumFractionDigits':2})}</td>
+                        <td><button id="deleteBtn" onClick={() => onDeleteRow(row, index)}>Delete</button></td>
                         </tr>
                     ))}
                 </tbody>
