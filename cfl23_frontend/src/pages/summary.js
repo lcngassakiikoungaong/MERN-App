@@ -132,27 +132,31 @@ function Summary() {
                 type: 'incomeTotal',
             });
             console.log("Response = " + response.data);
+            sessionStorage.setItem("income_value", incomeVal);
+
 
         } catch (error) {
             console.error(error);
         }
 
-        sessionStorage.setItem("income_value", incomeVal);
       } 
 
-      let updateMongoTotal = async (uid, amnt, ty) => {
+      let updateMongoTotal = async (uid, incomeVal, ty) => {
         try {
             //send post request to the 'api/users' endpoint
             const response = await axios.post('http://localhost:5000/api/updateSummary', { 
                 userID: uid,
-                financeTotal: amnt,
+                financeTotal: incomeVal,
                 type: ty,
             });
             console.log("Response = " + response.data);
+            sessionStorage.setItem("income_value", incomeVal);
+
 
         } catch (error) {
             console.error(error);
         }
+
       }
 
             
