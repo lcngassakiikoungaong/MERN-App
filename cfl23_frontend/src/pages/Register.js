@@ -7,37 +7,44 @@ import axios from 'axios';
 function Register() {
     const navigate = useNavigate();
 
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [data, setData] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+    })
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setErrorMessage] = useState('');
 
+    const handleChange = ({currentTarget: input }) => {
+        setData({ ...data, [input.name]:input.value });
+    }
+
     const handleSubmit = async (e) => { //onSubmit --> post
         e.preventDefault();
-        try{
-            //send post request to the 'api/users' endpoint
-            const response = await axios.post('http://localhost:5000/api/users', { 
-                firstName,
-                lastName,
-                email,
-                password,
-            });
 
-            sessionStorage.setItem('userID', response.date[0]._id);
-            setFirstName('');
-            setLastName('');
-            setPassword('');
-            setEmail('');
-        } catch (error) {
-            console.error(error);
-        }
-        if (password !== confirmPassword) {
+        if (data.password !== confirmPassword) {
             setErrorMessage("Passwords do not match");
             return;
+        } else {
+            try{
+                
+                const url = "http://localhost:5000/api/users";
+                //send post request to the 'api/users' endpoint
+                const { data: res } = await axios.post(url, data);
+                /*
+                sessionStorage.setItem('userID', res.data[0]._id);
+                console.log(res.data[0]._id);*/
+                
+                navigate('/summary');
+                
+                console.log(res.message);
+            } catch (error) {
+                if (error.response && error.response.status >= 400 && error.response.status <= 500) {
+                    setErrorMessage(error.response.data.message);
+                }
+            }
         }
-        navigate('/summary');
     };
 
     //show or hide password
@@ -70,8 +77,9 @@ function Register() {
                                     type="text"
                                     placeholder="First Name"
                                     className="input"
-                                    value={firstName}
-                                    onChange={(e) => setFirstName(e.target.value)}
+                                    name = "firstName"
+                                    value={data.firstName}
+                                    onChange={handleChange}
                                     required
                                 />
                             </div>
@@ -80,8 +88,9 @@ function Register() {
                                     type="text"
                                     placeholder="Last Name"
                                     className="input"
-                                    value={lastName}
-                                    onChange={(e) => setLastName(e.target.value)}
+                                    name = "lastName"
+                                    value={data.lastName}
+                                    onChange={handleChange}
                                     required
                                 />
                             </div>
@@ -90,8 +99,9 @@ function Register() {
                                     type="email"
                                     placeholder="Email"
                                     className="input"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    name = "email"
+                                    value={data.email}
+                                    onChange={handleChange}
                                     required
                                 />
                             </div>
@@ -100,8 +110,9 @@ function Register() {
                                     type={state ? "text" : "password"}
                                     placeholder="Password"
                                     className="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    name = "password"
+                                    value={data.password}
+                                    onChange={handleChange}
                                     required
                                 />
                                 <div onClick={toggleBtn}>
@@ -118,6 +129,9 @@ function Register() {
                                     required
                                 />
                             </div>
+
+                            {error && <div style={{color:"red"}}>{error}</div>}
+
                             <div className="field button-field">
                                 <button type="submit">Register</button>
                                 

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
+const loginController = require('../controllers/loginController');
 const tableController = require('../controllers/tableController');
 const summaryController = require('../controllers/summaryController');
 
@@ -33,12 +34,8 @@ router.post('/getSummary', summaryController.getSummary);
 router.post('/updateSummary', summaryController.updateSummary);
 
 
-
-
-
-
 //************ GET API Endpoints *************/
 
-router.get('/findUsers/:email', userController.findUser); //finds user according to email unique key
+router.post('/findUsers', loginController.findUser); //finds user according to email unique key
 
 module.exports = router;
