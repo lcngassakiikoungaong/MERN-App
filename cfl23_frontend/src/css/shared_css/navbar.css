@@ -98,6 +98,7 @@ nav {
   height: 25px;
   width: 65px;
   border: 2px solid gray;
+  cursor: pointer;
 }
 /* This is for the phone view */
 
