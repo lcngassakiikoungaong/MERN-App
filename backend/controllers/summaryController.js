@@ -3,6 +3,7 @@ const summarySchema = require('../models/summarySchema');
 
 //*** POST APIS ***/
 
+//Creates the summary field
 exports.createSummary = async (req, res) => { //Exports a single function, 'createUser'
     try{
         const summary = new summarySchema(req.body);
@@ -15,6 +16,7 @@ exports.createSummary = async (req, res) => { //Exports a single function, 'crea
     }
 };
 
+//Returns summary field value
 exports.getSummary = async (req, res) => {
     try{
         const id = req.body.userID; //extract ID
@@ -31,6 +33,7 @@ exports.getSummary = async (req, res) => {
     }
 };
 
+//Updates the summary field value
 exports.updateSummary = async (req, res) => {
     try{
         const id = req.body.userID; 

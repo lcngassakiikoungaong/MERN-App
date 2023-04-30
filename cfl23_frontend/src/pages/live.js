@@ -21,19 +21,21 @@ function Live() {
     let amntRef = useRef(null);
 
 
-        let createMongoRow = async (uid, cate, desc, date, amnt, rIndex) => 
+        let createMongoRow = async (uid, category, description, date, amount) => 
         {
             try {
 
                 const response = await axios.post('http://localhost:5000/api/liveRow', { 
                     userID: uid,
-                    category: cate,
-                    description: desc,
-                    date: date,
-                    amount: amnt,
-                    rowIndex: rIndex,
+                    category,
+                    description,
+                    date,
+                    amount,
                 });
-                console.log("MongoRow: " + response.data);
+                let _id = response.data._id;
+                setRows([...rows, { category, description, date, amount, _id }]);
+                sessionStorage.setItem("liveTableRows", JSON.stringify([...rows, { category, description, date, amount, _id }]));
+                
             } catch (error) {
                 console.error(error);
             }
@@ -55,17 +57,32 @@ function Live() {
             }
         
         }
+        let updateMongoSummary = async (uid, expenseVal, ty) => {
+            try {
+                //send post request to the 'api/users' endpoint
+                const response = await axios.post('http://localhost:5000/api/updateSummary', { 
+                    userID: uid,
+                    financeTotal: expenseVal,
+                    type: ty,
+                });    
+    
+            } catch (error) {
+                console.error(error);
+            }
+    
+          }
 
-        let deleteMongoRow = async (uid, rIndex) => 
+        let deleteMongoRow = async (uid, rID) => 
         {
             try {
                 //send post request to the 'api/users' endpoint
-
+                console.log("uid = " + uid + "rid = " + rID);
                 const response = await axios.post('http://localhost:5000/api/deleteLiveRow', { 
                     userID: uid,
-                    rowIndex: rIndex,
+                    _id: rID,
                 });
                 console.log(response.data);
+                await updateMongoSummary(sessionStorage.getItem('userID'), sessionStorage.getItem('liveTotal'), 'liveTotal');
             } catch (error) {
                 console.error(error);
             }
@@ -88,7 +105,7 @@ function Live() {
         
         
         let validateValue = (amnt) => {
-          let regX = /\D+/g;
+          let regX = /[^0-9.]/g;
 
           if (amnt.trim().search(regX) !== -1){
             amnt = amnt.replace(regX, "");
@@ -110,7 +127,6 @@ function Live() {
             let description = e.target.elements.Purchase.value;
             let date = e.target.elements.Date.value;
             let amount = parseFloat(validateValue(e.target.elements.Amount.value));
-            let rowIndex = totalRows;
             setTotalRows(totalRows + 1);
             sessionStorage.setItem('totalRows', totalRows);
             
@@ -121,10 +137,7 @@ function Live() {
                 setTotal(amnt);
                 sessionStorage.setItem("liveTotal", amnt);
 
-                setRows([...rows, { category, description, date, amount, rowIndex }]);
-                sessionStorage.setItem("liveTableRows", JSON.stringify([...rows, { category, description, date, amount, rowIndex }]));
-                
-                createMongoRow(uid, category, description, date, amount, rowIndex);
+                createMongoRow(uid, category, description, date, amount);
 
                 if (liveExists !== 0)
                 {
@@ -141,9 +154,8 @@ function Live() {
         let onDeleteRow = (index) => {
             let rowToDelete = rows[index];
             let amntToDelete = rowToDelete.amount;
-            let rowIndex = rowToDelete.rowIndex;
-            console.log("rowIndex = " + rowIndex)
-            console.log('index = ' + index);
+            let rID = rowToDelete._id;
+            
 
             setTotal(parseFloat(total) - parseFloat(amntToDelete));
             sessionStorage.setItem("liveTotal", parseFloat(total) - parseFloat(amntToDelete));
@@ -152,7 +164,7 @@ function Live() {
             setRows(updatedRows);
             sessionStorage.setItem("liveTableRows", JSON.stringify(updatedRows));
 
-            deleteMongoRow(sessionStorage.getItem('userID'), rowIndex);
+            deleteMongoRow(sessionStorage.getItem('userID'), rID);
         };
 
 

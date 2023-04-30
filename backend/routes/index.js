@@ -29,13 +29,13 @@ router.post('/getGiveRow', tableController.getGiveRow);
 router.post('/getGrowRow', tableController.getGrowRow);
 router.post('/getOweRow', tableController.getOweRow);
 router.post('/getSummary', summaryController.getSummary);
+router.post('/findUsers', loginController.findUser); //finds user according to email unique key
+
 
 //Update Database Functions
 router.post('/updateSummary', summaryController.updateSummary);
 
 
-//************ GET API Endpoints *************/
 
-router.post('/findUsers', loginController.findUser); //finds user according to email unique key
 
 module.exports = router;

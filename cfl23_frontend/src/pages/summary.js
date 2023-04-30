@@ -110,12 +110,12 @@ function Summary() {
       };
 
       let validateValue = (amnt) => {
-        let regX = /\D+/g;
+        let regX = /[^0-9.]/g;
         amnt = String(amnt);
 
         if (amnt.trim().search(regX) !== -1){
           amnt = amnt.replace(regX, "");
-          if (amnt.search(/\d+/g) === -1)
+          if (amnt.search(/\d+/g) === -1)//check for numbers
           {
             amnt = 0;
           }
@@ -131,7 +131,6 @@ function Summary() {
                 financeTotal: incomeVal,
                 type: 'incomeTotal',
             });
-            console.log("Response = " + response.data);
             sessionStorage.setItem("income_value", incomeVal);
 
 
@@ -149,7 +148,6 @@ function Summary() {
                 financeTotal: incomeVal,
                 type: ty,
             });
-            console.log("Response = " + response.data);
             sessionStorage.setItem("income_value", incomeVal);
 
 
@@ -227,8 +225,9 @@ function Summary() {
                 let circularProgress =  (circularProgressRef || '').current;
                 let marginValue = i_margin - l_sum - g_sum - gr_sum - o_sum;
             
-                let fontSize = 40; //Handles font size if number gets too large
-                let tmp = marginValue.toString().length;
+                //Handles font size if income number gets too large
+                let fontSize = 40; 
+                let tmp = marginValue.toFixed(2).toString().length;
                 if (tmp < 6) {
                 fontSize = 40;
                 (progressValue || '').style.fontSize = fontSize + "px";
@@ -492,6 +491,7 @@ function Summary() {
                             onFocus={handleIncomeInputFocus} 
                             onKeyPress={handleIncomeKeyPress} 
                             onBlur={handleIncomeFocusOut} 
+                            onPaste={validateValue}
                             autoComplete="false"
                             placeholder="Enter monthly income" 
                             /> 

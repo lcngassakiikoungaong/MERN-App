@@ -10,7 +10,7 @@ const summarySchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    type: {
+    type: { //Currently 5 types: “incomeTotal”, “liveTotal”, “giveTotal”, “growTotal”, “oweTotal”
         type: String,
         required: true,
     },

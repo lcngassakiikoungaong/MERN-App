@@ -32,9 +32,9 @@ function Register() {
                 const url = "http://localhost:5000/api/users";
                 //send post request to the 'api/users' endpoint
                 const { data: res } = await axios.post(url, data);
-                /*
-                sessionStorage.setItem('userID', res.data[0]._id);
-                console.log(res.data[0]._id);*/
+                
+                // sessionStorage.setItem('userID', "<PUT UID HERE>");
+                
                 
                 navigate('/summary');
                 
