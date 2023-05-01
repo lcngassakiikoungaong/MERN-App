@@ -21,7 +21,7 @@ exports.createLiveRow = async (req, res) => { //Exports a single function, 'crea
     }
 };
 
-exports.createGiveRow = async (req, res) => { //Exports a single function, 'createLiveRow'
+exports.createGiveRow = async (req, res) => { 
     try{
         const giveRow = new giveSchema(req.body);
         await giveRow.save();
@@ -33,7 +33,7 @@ exports.createGiveRow = async (req, res) => { //Exports a single function, 'crea
     }
 };
 
-exports.createGrowRow = async (req, res) => { //Exports a single function, 'createLiveRow'
+exports.createGrowRow = async (req, res) => { 
     try{
         const growRow = new growSchema(req.body);
         await growRow.save();
@@ -45,7 +45,7 @@ exports.createGrowRow = async (req, res) => { //Exports a single function, 'crea
     }
 };
 
-exports.createOweRow = async (req, res) => { //Exports a single function, 'createLiveRow'
+exports.createOweRow = async (req, res) => { 
     try{
         const oweRow = new oweSchema(req.body);
         await oweRow.save();
@@ -62,10 +62,10 @@ exports.createOweRow = async (req, res) => { //Exports a single function, 'creat
 exports.deleteLiveRow = async (req, res) => {
     try{
         const id = req.body.userID; //extract ID
-        const rIndex = req.body.rowIndex; //extract index
+        const rID = req.body._id; //extract index
 
         const deletedData = await liveSchema.findOneAndDelete( { 
-            $and: [ { userID: id }, { rowIndex: rIndex }]
+            $and: [ { userID: id }, { _id: rID }] 
         });
 
         if(!deletedData) {
@@ -81,10 +81,10 @@ exports.deleteLiveRow = async (req, res) => {
 exports.deleteGiveRow = async (req, res) => {
     try{
         const id = req.body.userID; //extract ID
-        const rIndex = req.body.rowIndex; //extract index
+        const rID = req.body._id; //extract index
 
         const deletedData = await giveSchema.findOneAndDelete( { 
-            $and: [ { userID: id }, { rowIndex: rIndex }]
+            $and: [ { userID: id }, { _id: rID }] 
         });
 
         if(!deletedData) {
@@ -96,14 +96,13 @@ exports.deleteGiveRow = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-
 exports.deleteGrowRow = async (req, res) => {
     try{
         const id = req.body.userID; //extract ID
-        const rIndex = req.body.rowIndex; //extract index
+        const rID = req.body._id; //extract index
 
         const deletedData = await growSchema.findOneAndDelete( { 
-            $and: [ { userID: id }, { rowIndex: rIndex }]
+            $and: [ { userID: id }, { _id: rID }] 
         });
 
         if(!deletedData) {
@@ -119,10 +118,10 @@ exports.deleteGrowRow = async (req, res) => {
 exports.deleteOweRow = async (req, res) => {
     try{
         const id = req.body.userID; //extract ID
-        const rIndex = req.body.rowIndex; //extract index
+        const rID = req.body._id; //extract index
 
         const deletedData = await oweSchema.findOneAndDelete( { 
-            $and: [ { userID: id }, { rowIndex: rIndex }]
+            $and: [ { userID: id }, { _id: rID }] 
         });
 
         if(!deletedData) {
@@ -135,7 +134,6 @@ exports.deleteOweRow = async (req, res) => {
     }
 };
 
-
 //--------RETRIEVAL FUNCTIONS------------
 
 exports.getLiveRow = async (req, res) => {
@@ -144,9 +142,10 @@ exports.getLiveRow = async (req, res) => {
    
 
         const responseData = await liveSchema.find({ 
-             userID: id 
+             userID: id
             });
-
+        
+        
         res.status(200).json({ data: responseData });
 
     } catch (error) {

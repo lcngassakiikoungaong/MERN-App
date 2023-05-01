@@ -23,10 +23,6 @@ const liveSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    rowIndex: {
-        type: Number,
-        required: true,
-    },
 });
 
 // The quotationed word is the name of the collection passed to mongo. If no collection exists, it will create a new one. 

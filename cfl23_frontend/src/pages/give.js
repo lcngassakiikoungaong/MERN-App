@@ -20,20 +20,22 @@ function Give() {
   
   let amntRef = useRef(null);
 
-        let createMongoRow = async (uid, cate, desc, date, amnt, rIndex) => 
+        let createMongoRow = async (uid, category, description, date, amount) => 
         {
             try {
-                //send post request to the 'api/users' endpoint
 
                 const response = await axios.post('http://localhost:5000/api/giveRow', { 
                     userID: uid,
-                    category: cate,
-                    description: desc,
-                    date: date,
-                    amount: amnt,
-                    rowIndex: rIndex,
+                    category,
+                    description,
+                    date,
+                    amount,
                 });
-                console.log(response.data);
+                let _id = response.data._id;
+                console.log(amount);
+                setRows([...rows, { category, description, date, amount, _id }]);
+                sessionStorage.setItem("giveTableRows", JSON.stringify([...rows, { category, description, date, amount, _id }]));
+                
             } catch (error) {
                 console.error(error);
             }
@@ -55,17 +57,31 @@ function Give() {
           }
       
       }
+      let updateMongoSummary = async (uid, expenseVal, ty) => {
+        try {
+            //send post request to the 'api/users' endpoint
+            const response = await axios.post('http://localhost:5000/api/updateSummary', { 
+                userID: uid,
+                financeTotal: expenseVal,
+                type: ty,
+            });    
 
-        let deleteMongoRow = async (uid, rIndex) => 
+        } catch (error) {
+            console.error(error);
+        }
+
+      }
+
+      let deleteMongoRow = async (uid, rID) => 
         {
             try {
                 //send post request to the 'api/users' endpoint
-
                 const response = await axios.post('http://localhost:5000/api/deleteGiveRow', { 
                     userID: uid,
-                    rowIndex: rIndex,
+                    _id: rID,
                 });
-                console.log("Response = " + response.data);
+                console.log(response.data);
+                await updateMongoSummary(sessionStorage.getItem('userID'), sessionStorage.getItem('giveTotal'), 'giveTotal');
             } catch (error) {
                 console.error(error);
             }
@@ -86,8 +102,10 @@ function Give() {
           }
         }
 
-        let validateValue = (amnt) => {
-          let regX = /\D+/g;
+        
+
+        let validateValue = (amnt) => { 
+          let regX = /[^0-9.]/g;
 
           if (amnt.trim().search(regX) !== -1){
             amnt = amnt.replace(regX, "");
@@ -107,7 +125,6 @@ function Give() {
           let description = e.target.elements.Purchase.value;
           let date = e.target.elements.Date.value;
           let amount = parseFloat(validateValue(e.target.elements.Amount.value));
-          let rowIndex = totalRows;
           setTotalRows(totalRows + 1);
           sessionStorage.setItem('totalRows', totalRows);
 
@@ -119,10 +136,7 @@ function Give() {
             setTotal(amnt);
             sessionStorage.setItem("giveTotal", amnt);
           
-              setRows([...rows, { category, description, date, amount, rowIndex }]);
-              sessionStorage.setItem("giveTableRows", JSON.stringify([...rows, { category, description, date, amount, rowIndex }]));
-              
-              createMongoRow(uid, category, description, date, amount, rowIndex);
+            createMongoRow(uid, category, description, date, amount);
 
               if (giveExists !== 0)
               {
@@ -136,12 +150,11 @@ function Give() {
       
         };
     
-        let onDeleteRow = (row, index) => {
+        let onDeleteRow = (index) => {
           let rowToDelete = rows[index];
+          console.log(index);
           let amntToDelete = rowToDelete.amount;
-          let rowIndex = rowToDelete.rowIndex;
-          
-          console.log(row);
+          let rID = rowToDelete._id;          
 
           setTotal(parseFloat(total) - parseFloat(amntToDelete));
           sessionStorage.setItem("giveTotal", parseFloat(total) - parseFloat(amntToDelete));
@@ -150,7 +163,7 @@ function Give() {
           setRows(updatedRows);
           sessionStorage.setItem("giveTableRows", JSON.stringify(updatedRows));
 
-          deleteMongoRow(sessionStorage.getItem('userID'), rowIndex);
+          deleteMongoRow(sessionStorage.getItem('userID'), rID);
         };
 
         let [category, setCategory] = useState('');
@@ -289,7 +302,7 @@ return (
                         <td id="desp">{row.description}</td>
                         <td>{formatDate(row.date)}</td>
                         <td>{'$' + row.amount.toLocaleString('en-US', {'minimumFractionDigits':2,'maximumFractionDigits':2})}</td>
-                        <td><button id="deleteBtn" onClick={() => onDeleteRow(row, index)}>Delete</button></td>
+                        <td><button id="deleteBtn" onClick={() => onDeleteRow(index)}>Delete</button></td>
                         </tr>
                     ))}
                 </tbody>

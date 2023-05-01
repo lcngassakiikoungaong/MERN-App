@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "../css/shared_css/navbar.css";
-import { Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 class Navbar extends Component {
     state = {clicked: false};
@@ -11,6 +11,7 @@ class Navbar extends Component {
 
     logout = () => {
         window.location.href = "/";
+        sessionStorage.clear();
     }
 
     render() { 
@@ -28,7 +29,7 @@ class Navbar extends Component {
             />
         <nav>
             <div className="nav-links" id="navLinks">
-                <ul id="navbar" className={this.state.clicked ? "#navbar active" : "#navbar"}>
+                <ul id="navbar" className={this.state.clicked ? "#navbar active" : "#navbar"}>{/* transition between phone view display on clicking the burger menu */}
                     <li><Link to="/summary" id="homeNav">SUMMARY</Link></li>
                     <li><Link to="/live" id="liveNav">LIVE</Link></li>
                     <li><Link to="/give" id="giveNav">GIVE</Link></li>
@@ -39,7 +40,7 @@ class Navbar extends Component {
                 </ul>
             </div>
             <div id="menu" onClick={this.handleCLick}>
-                <i id="bars" className={this.state.clicked ? "fas fa-times" : "fas fa-bars"}></i>
+                <i id="bars" className={this.state.clicked ? "fas fa-times" : "fas fa-bars"}></i> {/*transition between burger and X in phone view */}
             </div>
         </nav>
         </>

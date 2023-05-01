@@ -55,8 +55,8 @@ function Login() {
                     type: 'oweTotal',
                 });
                 
-
                 //Set session storage items for Expense Table Rows
+                console.log(JSON.stringify(liveRow.data.data));
                 sessionStorage.setItem('liveTableRows', JSON.stringify(liveRow.data.data));
                 sessionStorage.setItem('giveTableRows', JSON.stringify(giveRow.data.data));
                 sessionStorage.setItem('growTableRows', JSON.stringify(growRow.data.data));
@@ -124,8 +124,9 @@ const handleSubmit = async (e) => {
         const url = "http://localhost:5000/api/findUsers";
         // Send POST request to server to authenticate user
         const { data: res } = await axios.post(url, data);
-        
-        await getMongoRows(res.data[0]._id);
+
+        // sessionStorage.setItem('userID', "<PUT UID HERE>");
+        await getMongoRows(sessionStorage.getItem('userID')); //retrieves data based on the User token
         navigate("/summary");
         console.log(res.message);
     } catch (error) {
