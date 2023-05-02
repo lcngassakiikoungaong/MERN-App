@@ -1,5 +1,5 @@
+//import necessary schema
 const summarySchema = require('../models/summarySchema');
-
 
 //*** POST APIS ***/
 

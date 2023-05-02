@@ -123,12 +123,15 @@ const handleSubmit = async (e) => {
     try {
         const url = "http://localhost:5000/api/findUsers";
         // Send POST request to server to authenticate user
-        const { data: res } = await axios.post(url, data);
-
+        const response = await axios.post(url, data);
+        const { data: responseData } = response;
+        console.log("Response data:", responseData);
+        
+        sessionStorage.setItem("userID", responseData.data.userID);
         // sessionStorage.setItem('userID', "<PUT UID HERE>");
         await getMongoRows(sessionStorage.getItem('userID')); //retrieves data based on the User token
         navigate("/summary");
-        console.log(res.message);
+        console.log("logged in successfully!");
     } catch (error) {
         if (error.response && error.response.status >= 400 && error.response.status <= 500) {
             setErrorMes(error.response.data.message);

@@ -11,7 +11,6 @@ const sendEmail = require('../utils/sendEmail');
 //************ POST API Functions *************/
 
 exports.createUser = async (req, res) => { //Exports a single function, 'createUser'
-    console.log(req.body.password);
     try{
         let { error } = validate(req.body);
         if(error) {
@@ -34,7 +33,7 @@ exports.createUser = async (req, res) => { //Exports a single function, 'createU
         let encryptToken = await bcrypt.hash(token, salt);
         user.password = hashPassword;
         user.token = encryptToken;
-
+        console.log(user._id);
 		let findToken = await Token.findOne({ userId: user._id });
 		if (!findToken) {
 		    token = await new Token({
