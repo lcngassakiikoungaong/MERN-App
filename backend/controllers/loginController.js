@@ -1,6 +1,9 @@
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const Joi = require("joi");
+const Token = require('../models/token');
+const crypto = require('crypto');
+const sendEmail = require("../utils/sendEmail");
 
 const validate = (data) => {
     const schema = Joi.object({
@@ -31,8 +34,10 @@ exports.findUser = async (req, res) => {
             return res.status(401).send({message: "Invalid Email or Password" });
         }
 
-        const token = user.generateToken();
-        res.status(200).send({data: token, message:"Logged in sucessfully"});
+        
+
+        const token = user.generateAuthToken();
+		res.status(200).send({ data: token, message: "logged in successfully" });
 
     } catch(error) {
         console.log(error.stack);

@@ -4,6 +4,7 @@ const userController = require('../controllers/userController');
 const loginController = require('../controllers/loginController');
 const tableController = require('../controllers/tableController');
 const summaryController = require('../controllers/summaryController');
+const forgotController = require('../controllers/forgotController');
 
 // Explanation: Routes that maps the '/<name>' endpoint to the related controller function
 
@@ -36,6 +37,9 @@ router.post('/findUsers', loginController.findUser); //finds user according to e
 router.post('/updateSummary', summaryController.updateSummary);
 
 
-
+//Sends password link
+router.post('/link', forgotController.emailUser);
+//Resets password
+router.post('/forgotPassword', forgotController.resetPassword);
 
 module.exports = router;

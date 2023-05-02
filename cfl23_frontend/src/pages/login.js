@@ -174,7 +174,7 @@ const handleSubmit = async (e) => {
                                     </div>
 
                                     <div className="form-link">
-                                        <NavLink to=" " className="forgot-pass">Forgot password?</NavLink>
+                                        <NavLink to="/forgotPassword" className="forgot-pass">Forgot password?</NavLink>
                                     </div>
 
                                     {error && <div style={{color: "red"}}>{error}</div>} 

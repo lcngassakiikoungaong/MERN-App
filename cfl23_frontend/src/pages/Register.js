@@ -31,14 +31,11 @@ function Register() {
                 
                 const url = "http://localhost:5000/api/users";
                 //send post request to the 'api/users' endpoint
-                const { data: res } = await axios.post(url, data);
+                const { data: { user } } = await axios.post(url, data);
                 
-                // sessionStorage.setItem('userID', "<PUT UID HERE>");
-                
-                
+                sessionStorage.setItem('userID', user._id);
+                console.log(user._id);
                 navigate('/summary');
-                
-                console.log(res.message);
             } catch (error) {
                 if (error.response && error.response.status >= 400 && error.response.status <= 500) {
                     setErrorMessage(error.response.data.message);
