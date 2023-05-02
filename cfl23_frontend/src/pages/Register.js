@@ -68,6 +68,7 @@ function Register() {
                 <div className="form login" id="regis">
                     <div className="form-content">
                         <header>Register</header>
+                        {error && <div style={{color:"red", textAlign: "center", paddingTop: "15px"}}>{error}</div>}
                         <form action="#" onSubmit={handleSubmit}>
                             <div className="field input-field">
                                 <input
@@ -125,9 +126,12 @@ function Register() {
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                     required
                                 />
+                                <div onClick={toggleBtn}>
+                                    <i className={state ? "bx bx-show eye-icon" : "bx bx-hide eye-icon"}></i>
+                                </div>
                             </div>
 
-                            {error && <div style={{color:"red"}}>{error}</div>}
+                           
 
                             <div className="field button-field">
                                 <button type="submit">Register</button>
