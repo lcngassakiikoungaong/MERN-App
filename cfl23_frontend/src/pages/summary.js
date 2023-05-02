@@ -181,6 +181,16 @@ function Summary() {
         
           setIncomeValue('');
           sessionStorage.setItem("income_value", incomeValue);
+          if(incomeExists !== 0)
+            {
+                setIncomeValue(incomeValue);
+                updateMongoTotal(sessionStorage.getItem('userID'), 0, 'incomeTotal');
+
+            }else{
+                createMongoTotal(sessionStorage.getItem('userID'), 0); //update Mongo database
+                setIncomeExists(1);
+                sessionStorage.setItem('incomeExists', 1);
+            }    
           incomeInput();
         }
       };

@@ -128,7 +128,6 @@ const handleSubmit = async (e) => {
         console.log("Response data:", responseData);
         
         sessionStorage.setItem("userID", responseData.data.userID);
-        // sessionStorage.setItem('userID', "<PUT UID HERE>");
         await getMongoRows(sessionStorage.getItem('userID')); //retrieves data based on the User token
         navigate("/summary");
         console.log("logged in successfully!");
@@ -164,6 +163,7 @@ const handleSubmit = async (e) => {
                         <div className="form login">
                             <div className="form-content">
                                 <header>Login</header>
+                                {error && <div style={{color: "red", textAlign: "center", paddingTop: "15px"}}>{error}</div>} 
                                 <form action="#" onSubmit={handleSubmit}>
                                     <div className="field input-field">
                                         <input type="email" placeholder="Email" className="input" name = "email" value={data.email} onChange={handleChange} required />
@@ -179,8 +179,6 @@ const handleSubmit = async (e) => {
                                     <div className="form-link">
                                         <NavLink to="/forgotPassword" className="forgot-pass">Forgot password?</NavLink>
                                     </div>
-
-                                    {error && <div style={{color: "red"}}>{error}</div>} 
 
                                     <div className="field button-field">
                                         <button type="submit">Login</button>

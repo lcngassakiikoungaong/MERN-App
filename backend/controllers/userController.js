@@ -34,19 +34,21 @@ exports.createUser = async (req, res) => { //Exports a single function, 'createU
         user.password = hashPassword;
         user.token = encryptToken;
         console.log(user._id);
-		let findToken = await Token.findOne({ userId: user._id });
-		if (!findToken) {
-		    token = await new Token({
-			userId: user._id,
-			token: crypto.randomBytes(32).toString("hex"),
-		    }).save();
-			const url = `${process.env.BASE_URL}users/${user._id}/verify/${token.token}`;
-			await sendEmail(user.email, "Verify Email", url);
-            res
-			.status(400)
-			.send({ message: "An Email sent to your account please verify" });
 
-		}
+        /************* VERIFY EMAIL CODE (NOT WORKING CURRENTLY) ****************/
+		// let findToken = await Token.findOne({ userId: user._id });
+		// if (!findToken) {
+		//     token = await new Token({
+		// 	userId: user._id,
+		// 	token: crypto.randomBytes(32).toString("hex"),
+		//     }).save();
+		// 	const url = `${process.env.BASE_URL}users/${user._id}/verify/${token.token}`;
+		// 	await sendEmail(user.email, "Verify Email", url);
+        //     res
+		// 	.status(400)
+		// 	.send({ message: "An Email sent to your account please verify" });
+
+		// }
 
         await user.save();
         res.status(201).json({ user: user, token: encryptToken });
