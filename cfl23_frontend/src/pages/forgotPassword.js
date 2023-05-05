@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../css/login.css";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function ForgotPassword() {
     // eslint-disable-next-line no-unused-vars
@@ -17,7 +18,6 @@ function ForgotPassword() {
                 // Send POST request to server to authenticate user
                 const { data } = await axios.post(url, {email});
                 setCorrectMes(data.message);
-                console.log(data.message);
             } catch (error) {
                 if (error.response && error.response.status >= 400 && error.response.status <= 500) {
                     setErrorMes(error.response.data.message);
@@ -52,6 +52,10 @@ function ForgotPassword() {
 
                                     <div className="field button-field">
                                         <button type="submit">Submit</button>
+                                    </div>
+
+                                    <div className="form-link">
+                                        <span>Go Back to <Link to='/' className="link sign-up-link"> Login </Link></span>
                                     </div>
                                 </form>
                             </div>
