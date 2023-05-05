@@ -108,9 +108,9 @@ function About() {
                         </div>
                     </div>
                     <div className="contact-col">
-                        <form action="../UI/backend/form-handler.php" method="post">
+                        <form action="#" onSubmit={(e) => {e.preventDefault();}}>
                             <input type="text" name="name" placeholder="Enter your Name" required />
-                            <input type="text" name="email" placeholder="Enter your Email Address" required />
+                            <input type="email" name="email" placeholder="Enter your Email Address" required />
                             <input type="text" name="subject" placeholder="Enter your Subject" required />
                             <textarea name="message" placeholder="Message" required></textarea>
                             <button type="submit" className="hero-btn gold-btn" id="LibertyBtn">
